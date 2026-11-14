@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -30,7 +30,7 @@ input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-ra
 .primary{background:#1769aa;color:white;border:0;padding:14px;border-radius:10px;font-weight:bold;width:100%;margin-top:16px}
 .secondary{background:#eaf1fb;color:#174b87;border:0;padding:12px;border-radius:10px;font-weight:bold}
 .danger{background:#ffe8e8;color:#a22;border:0;padding:12px;border-radius:10px;font-weight:bold}
-.message{padding:12px;border-radius:9px;margin-top:13px;font-size:13px;display:none}
+.message{padding:12px;border-radius:9px;margin-top:13px;font-size:13px;display:none;overflow-wrap:anywhere}
 .error{background:#ffe5e5;color:#a00000}
 .success{background:#e1f7e9;color:#176337}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
@@ -53,18 +53,23 @@ input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-ra
 .nav button{background:none;border:0;color:#52627a;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}
 .nav .mic{background:#1769aa;color:white;width:53px;height:53px;border-radius:50%;font-size:23px;margin-top:-23px}
 .nav span{font-size:20px}
-.page-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
+.page-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;gap:8px}
 .row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
 .row button{flex:1}
 .item{padding:13px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
 .admin-badge{display:inline-block;padding:6px 10px;background:#eaf1fb;color:#174b87;border-radius:20px;font-size:12px;font-weight:bold}
+.status{display:inline-block;padding:5px 9px;border-radius:15px;font-size:11px;font-weight:bold;background:#eaf1fb;color:#174b87}
+.status.active,.status.approved{background:#e1f7e9;color:#176337}
+.status.pending{background:#fff2d9;color:#8a5a00}
+.status.suspended,.status.rejected,.status.closed,.status.expired{background:#ffe5e5;color:#a00000}
+.smallbtn{padding:9px 11px;border:0;border-radius:8px;font-size:12px;font-weight:bold;margin:5px 4px 0 0}
 footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
+hr{border:0;border-top:1px solid #edf0f5;margin:18px 0}
 @media(max-width:350px){.brand{font-size:21px}.grid{gap:8px}.tile{padding:13px}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN AND REGISTRATION -->
 <section id="authScreen" class="screen">
 <header>
 <div class="brand">HESABORA</div>
@@ -100,12 +105,8 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 </main>
 </section>
 
-<!-- BUSINESS SETUP -->
 <section id="setupScreen" class="screen">
-<header>
-<div class="brand">HESABORA</div>
-<div class="tagline">Your Business, Under Control.</div>
-</header>
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></header>
 <main>
 <div class="card">
 <h2>Register Your Business</h2>
@@ -122,14 +123,10 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 </main>
 </section>
 
-<!-- MAIN APPLICATION -->
 <section id="appScreen" class="screen">
 <header>
 <div class="top">
-<div>
-<div class="brand">HESABORA</div>
-<div class="tagline">Your Business, Under Control.</div>
-</div>
+<div><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></div>
 <button class="secondary" id="notificationButton">🔔</button>
 </div>
 <div class="headername" id="businessHeading">Welcome Back! 👋</div>
@@ -137,16 +134,12 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 </header>
 
 <main>
-<!-- DASHBOARD -->
 <div id="dashboardPage" class="appPage">
 <div class="page-title"><h2>Financial Overview</h2></div>
 <div class="row">
-<button class="secondary filter">Today</button>
-<button class="secondary filter">Yesterday</button>
-<button class="secondary filter">Weekly</button>
-<button class="secondary filter">Monthly</button>
+<button class="secondary filter">Today</button><button class="secondary filter">Yesterday</button>
+<button class="secondary filter">Weekly</button><button class="secondary filter">Monthly</button>
 </div>
-
 <div class="grid">
 <button class="tile blue" onclick="openPage('recordPage')"><div class="icon">🧾</div><strong>Record</strong><small>Record a sale</small></button>
 <button class="tile green" onclick="openPage('salesPage')"><div class="icon">📈</div><strong>Today's Sales</strong><small>Cash and M-Pesa</small></button>
@@ -155,133 +148,108 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 <button class="tile purple" onclick="openPage('expensesPage')"><div class="icon">💸</div><strong>Expenses</strong><small>Business spending</small></button>
 <button class="tile teal" onclick="openPage('profitPage')"><div class="icon">💰</div><strong>Profit</strong><small>Business performance</small></button>
 </div>
-
 <div class="market">
-<h2>🛍️ HESABORA MARKET</h2>
-<p>Discover products or sell your products to customers.</p>
+<h2>🛍️ HESABORA MARKET</h2><p>Discover products or sell your products to customers.</p>
 <button class="sell" onclick="openPage('marketPage')">SELL</button>
 <button class="buy" onclick="openPage('marketPage')">BUY</button>
 </div>
-
 <div class="card">
 <h3>Business Tools</h3>
-<div class="row">
-<button class="secondary" onclick="openPage('customersPage')">👥 Customers</button>
-<button class="secondary" onclick="openPage('suppliersPage')">🏪 Suppliers</button>
-</div>
-<div class="row">
-<button class="secondary" onclick="openPage('reportsPage')">📊 Reports</button>
-<button class="secondary" onclick="openPage('settingsPage')">⚙️ Settings</button>
-</div>
+<div class="row"><button class="secondary" onclick="openPage('customersPage')">👥 Customers</button><button class="secondary" onclick="openPage('suppliersPage')">🏪 Suppliers</button></div>
+<div class="row"><button class="secondary" onclick="openPage('reportsPage')">📊 Reports</button><button class="secondary" onclick="openPage('settingsPage')">⚙️ Settings</button></div>
 </div>
 </div>
 
-<!-- RECORD -->
 <div id="recordPage" class="appPage hidden">
 <div class="page-title"><h2>Record a Sale</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<form id="saleForm">
+<div class="card"><form id="saleForm">
 <label>Product Name (optional)</label><input id="saleProduct">
-<label>Mode of Payment</label>
-<select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
+<label>Mode of Payment</label><select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
 <label>Amount (KSh)</label><input id="saleAmount" type="number" min="0.01" step="0.01" required>
 <button class="primary">SAVE SALE</button>
-</form>
-<div id="saleMessage" class="message"></div>
-</div>
+</form><div id="saleMessage" class="message"></div></div>
 </div>
 
-<!-- SALES -->
 <div id="salesPage" class="appPage hidden">
 <div class="page-title"><h2>Sales Summary</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<div class="item">Cash Sales: <strong id="cashSales">KSh 0</strong></div>
-<div class="item">M-Pesa Sales: <strong id="mpesaSales">KSh 0</strong></div>
-<div class="item">Total Sales: <strong id="totalSales">KSh 0</strong></div>
-</div>
+<div class="card"><div class="item">Cash Sales: <strong id="cashSales">KSh 0</strong></div><div class="item">M-Pesa Sales: <strong id="mpesaSales">KSh 0</strong></div><div class="item">Total Sales: <strong id="totalSales">KSh 0</strong></div></div>
 </div>
 
-<!-- DEBTS -->
 <div id="debtsPage" class="appPage hidden">
 <div class="page-title"><h2>Customer Debts</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<form id="debtForm">
+<div class="card"><form id="debtForm">
 <label>Customer Name</label><input id="debtCustomer" required>
 <label>Product Taken</label><input id="debtProduct" required>
 <label>Amount Owed (KSh)</label><input id="debtAmount" type="number" min="0.01" step="0.01" required>
 <button class="primary">SAVE DEBT</button>
-</form>
-<div id="debtMessage" class="message"></div>
-</div>
+</form><div id="debtMessage" class="message"></div></div>
 </div>
 
-<!-- STOCK -->
 <div id="stockPage" class="appPage hidden">
 <div class="page-title"><h2>Stock Management</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card"><h3>Inventory</h3><p class="muted">Track products, quantities and purchase costs.</p><p>Stock management will be connected to live inventory in the next database integration step.</p></div>
+<div class="card"><h3>Inventory</h3><p class="muted">Track products, quantities and purchase costs.</p><p>Stock management will be connected to live inventory in a later database integration step.</p></div>
 </div>
 
-<!-- EXPENSES -->
 <div id="expensesPage" class="appPage hidden">
 <div class="page-title"><h2>Expenses</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<form id="expenseForm">
+<div class="card"><form id="expenseForm">
 <label>Expense Type</label><input id="expenseType" required>
 <label>Amount (KSh)</label><input id="expenseAmount" type="number" min="0.01" step="0.01" required>
 <button class="primary">SAVE EXPENSE</button>
-</form>
-<div id="expenseMessage" class="message"></div>
-</div>
+</form><div id="expenseMessage" class="message"></div></div>
 </div>
 
-<!-- PROFIT -->
 <div id="profitPage" class="appPage hidden">
 <div class="page-title"><h2>Profit Overview</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<h3>Business Profit</h3>
-<p class="muted">Gross Profit = Sales − Cost of Goods Sold</p>
-<p class="muted">Net Profit = Gross Profit − Expenses</p>
-<p>Profit calculations will be enabled after stock costs and transactions are connected.</p>
-</div>
+<div class="card"><h3>Business Profit</h3><p class="muted">Gross Profit = Sales − Cost of Goods Sold</p><p class="muted">Net Profit = Gross Profit − Expenses</p><p>Profit calculations will be enabled after stock costs and transactions are connected.</p></div>
 </div>
 
-<!-- CUSTOMERS -->
 <div id="customersPage" class="appPage hidden">
 <div class="page-title"><h2>Customers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
 <div class="card"><p>Customer records and purchase history.</p><p class="muted">Customer database integration is coming next.</p></div>
 </div>
 
-<!-- SUPPLIERS -->
 <div id="suppliersPage" class="appPage hidden">
 <div class="page-title"><h2>Suppliers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
 <div class="card"><p>Manage suppliers and purchase records.</p><p class="muted">Supplier database integration is coming next.</p></div>
 </div>
 
-<!-- MARKET -->
 <div id="marketPage" class="appPage hidden">
 <div class="page-title"><h2>HESABORA MARKET</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<h2>Welcome to HESABORA MARKET</h2>
-<p class="muted">Buy and sell products.</p>
-<button class="primary" onclick="openPage('sellPage')">🛒 SELL PRODUCTS</button>
-<button class="primary" onclick="openPage('buyPage')">🔎 BUY PRODUCTS</button>
-</div>
+<div class="card"><h2>Welcome to HESABORA MARKET</h2><p class="muted">Buy and sell products.</p><button class="primary" onclick="openPage('sellPage')">🛒 SELL PRODUCTS</button><button class="primary" onclick="openPage('buyPage')">🔎 BUY PRODUCTS</button></div>
 </div>
 
-<div id="sellPage" class="appPage hidden">
-<div class="page-title"><h2>Sell Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div>
-<div class="card"><p>Seller registration and paid listing packages will be connected in the Market development stage.</p></div>
-</div>
+<div id="sellPage" class="appPage hidden"><div class="page-title"><h2>Sell Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div><div class="card"><p>Seller registration and paid listing packages will be connected in the Market development stage.</p></div></div>
+<div id="buyPage" class="appPage hidden"><div class="page-title"><h2>Buy Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div><div class="card"><p>Product browsing and seller contact will be connected in the Market development stage.</p></div></div>
 
-<div id="buyPage" class="appPage hidden">
-<div class="page-title"><h2>Buy Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div>
-<div class="card"><p>Product browsing and seller contact will be connected in the Market development stage.</p></div>
-</div>
-
-<!-- REPORTS -->
 <div id="reportsPage" class="appPage hidden">
 <div class="page-title"><h2>Reports</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
 <div class="card"><p>Daily, weekly and monthly business reports will be connected to live records.</p></div>
+</div>
+
+<!-- SUBSCRIPTION -->
+<div id="subscriptionPage" class="appPage hidden">
+<div class="page-title"><h2>Subscription</h2><button class="secondary" onclick="openPage('settingsPage')">← Back</button></div>
+<div class="card">
+<h3>HESABORA Business</h3>
+<p style="font-size:30px;font-weight:bold;color:#1769aa">KSh 300 <small style="font-size:13px">/ 30 days</small></p>
+<p class="muted">Your subscription gives you access to HESABORA Business services.</p>
+<div id="subscriptionStatus" class="item">Loading subscription...</div>
+<button class="primary" onclick="showPaymentForm()">PAY WITH M-PESA</button>
+<div id="paymentForm" class="hidden">
+<hr>
+<h3>Pay by M-PESA</h3>
+<p>Send <strong>KSh 300</strong> to this phone number:</p>
+<div style="font-size:25px;font-weight:bold;color:#1769aa;text-align:center;padding:12px">0114772821</div>
+<p class="muted">After sending the money, enter the M-PESA transaction code below. Your subscription will only activate after Super Admin verifies the payment.</p>
+<form id="subscriptionPaymentForm">
+<label>M-PESA Transaction Code</label><input id="mpesaCode" required maxlength="30" placeholder="e.g. QWE1234567">
+<label>Phone number used to pay</label><input id="paymentPhone" required type="tel" placeholder="07XXXXXXXX">
+<button class="primary" id="submitPaymentButton">SUBMIT PAYMENT</button>
+</form>
+<div id="paymentMessage" class="message"></div>
+</div>
+</div>
 </div>
 
 <!-- SETTINGS -->
@@ -289,12 +257,11 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 <div class="page-title"><h2>Settings</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
 <div class="card">
 <h3>Business Settings</h3>
-<p id="settingsBusiness"></p>
-<p id="settingsPhone"></p>
-<p class="muted">Subscription: Not yet activated</p>
+<p id="settingsBusiness"></p><p id="settingsPhone"></p>
+<p id="settingsSubscription" class="muted">Subscription: Checking...</p>
+<button class="primary" onclick="openSubscription()">💳 SUBSCRIPTION & PAYMENTS</button>
 <div id="adminAccessArea" class="hidden">
-<hr style="border:0;border-top:1px solid #edf0f5;margin:20px 0">
-<h3>System Administration</h3>
+<hr><h3>System Administration</h3>
 <p class="muted">Separate portal for authorised administrators.</p>
 <button class="primary" id="openAdminButton">🔐 OPEN ADMIN PORTAL</button>
 </div>
@@ -306,26 +273,38 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 <div id="adminPortalPage" class="appPage hidden">
 <div class="page-title"><h2>Admin Portal</h2><button class="secondary" onclick="openPage('settingsPage')">← Back</button></div>
 <div class="card">
-<h3>HESABORA Administration</h3>
-<p class="muted">Separate system administration portal.</p>
-<p id="adminIdentity"></p>
+<h3>HESABORA Administration</h3><p id="adminIdentity"></p>
 <span class="admin-badge" id="adminRoleBadge">ADMIN</span>
 </div>
 
 <div id="superAdminTools" class="hidden">
 <div class="card">
+<h3>Pending M-PESA Payments</h3>
+<button class="secondary" onclick="loadPendingPayments()" style="width:100%">REFRESH PAYMENTS</button>
+<div id="pendingPaymentsList"><p class="muted">Loading...</p></div>
+<div id="paymentReviewMessage" class="message"></div>
+</div>
+
+<div class="card">
+<h3>Registered Businesses</h3>
+<button class="secondary" onclick="loadBusinesses()" style="width:100%">REFRESH BUSINESSES</button>
+<div id="businessAdminList"><p class="muted">Loading...</p></div>
+<div id="businessAdminMessage" class="message"></div>
+</div>
+
+<div class="card">
+<h3>Registered Admins</h3>
+<button class="secondary" onclick="loadAdminList()" style="width:100%">REFRESH ADMINS</button>
+<div id="adminList"><p class="muted">Loading...</p></div>
+<div id="adminListMessage" class="message"></div>
+</div>
+
+<div class="card">
 <h3>Add Existing HESABORA Admin</h3>
 <p class="muted">The person must already have a HESABORA account. Enter their Supabase User ID.</p>
 <form id="addAdminForm">
-<label>User ID (UUID)</label><input id="newAdminUserId" required placeholder="Paste user's Supabase User ID">
+<label>User ID (UUID)</label><input id="newAdminUserId" required placeholder="Supabase User ID">
 <label>Full Name</label><input id="newAdminName" required>
-<label>Role</label>
-<select id="newAdminRole">
-<option value="finance_admin">Finance Admin</option>
-<option value="support_admin">Customer Support Admin</option>
-<option value="verification_admin">Business Verification Admin</option>
-<option value="market_admin">Market Admin</option>
-</select>
 <label>Responsibilities</label>
 <select id="newAdminResponsibilities" multiple size="5">
 <option value="payment_approval">Payment Approval</option>
@@ -334,22 +313,15 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 <option value="market_management">Market Management</option>
 <option value="reports">Reports</option>
 </select>
-<button class="primary" type="submit">ADD ADMIN</button>
+<button class="primary">ADD ADMIN</button>
 </form>
 <div id="addAdminMessage" class="message"></div>
-</div>
-
-<div class="card">
-<h3>Registered Admins</h3>
-<button class="secondary" id="refreshAdminsButton" style="width:100%">REFRESH ADMIN LIST</button>
-<div id="adminList"><p class="muted">Load admin list to view records.</p></div>
-<div id="adminListMessage" class="message"></div>
+<p class="muted">Adding an admin requires an authorised database policy or server-side admin function.</p>
 </div>
 </div>
 
 <div id="regularAdminInfo" class="card hidden">
-<h3>Your Admin Access</h3>
-<p class="muted">Your permissions are assigned by the HESABORA Super Admin.</p>
+<h3>Your Admin Access</h3><p class="muted">Your permissions are assigned by the HESABORA Super Admin.</p>
 <div id="myResponsibilities"></div>
 </div>
 
@@ -363,8 +335,7 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 <div id="voicePage" class="appPage hidden">
 <div class="page-title"><h2>Voice Assistant</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
 <div class="card" style="text-align:center">
-<div style="font-size:55px">🎙️</div>
-<h3>HESABORA Voice Assistant</h3>
+<div style="font-size:55px">🎙️</div><h3>HESABORA Voice Assistant</h3>
 <p class="muted">Speak in English or Kiswahili to record business activities.</p>
 <button class="primary" id="voiceButton">START SPEAKING</button>
 <p id="voiceResult"></p>
@@ -391,48 +362,50 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null;
 let currentBusiness=null;
 let currentAdmin=null;
+let currentSubscription=null;
 
-/* DISPLAY ONLY ONE MAIN SCREEN */
 function showScreen(id){
- document.querySelectorAll(".screen").forEach(screen=>{
-  screen.classList.remove("active");
- });
- const screen=document.getElementById(id);
- if(screen)screen.classList.add("active");
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ const s=document.getElementById(id);
+ if(s)s.classList.add("active");
  window.scrollTo(0,0);
 }
-
-/* DISPLAY ONLY ONE APP PAGE */
 function openPage(id){
- document.querySelectorAll(".appPage").forEach(page=>{
-  page.classList.add("hidden");
- });
- const target=document.getElementById(id);
- if(target)target.classList.remove("hidden");
+ document.querySelectorAll(".appPage").forEach(p=>p.classList.add("hidden"));
+ const p=document.getElementById(id);
+ if(p)p.classList.remove("hidden");
  window.scrollTo(0,0);
 }
-
 function normalizePhone(v){
  let p=v.replace(/[\s\-()]/g,"");
  if(/^0[17]\d{8}$/.test(p))p="+254"+p.substring(1);
  else if(/^254[17]\d{8}$/.test(p))p="+"+p;
  else if(/^[17]\d{8}$/.test(p))p="+254"+p;
- if(!/^\+254[17]\d{8}$/.test(p)){
-  throw Error("Enter a valid Kenyan number, e.g. 0712345678.");
- }
+ if(!/^\+254[17]\d{8}$/.test(p))throw Error("Enter a valid Kenyan number, e.g. 0712345678.");
  return p;
 }
-
-function internalEmail(phone){
- return phone.replace("+","")+"@login.hesabora.app";
-}
-
+function internalEmail(phone){return phone.replace("+","")+"@login.hesabora.app";}
 function showMsg(id,msg,type="success"){
  const e=document.getElementById(id);
  if(!e)return;
  e.textContent=msg;
  e.className="message "+type;
  e.style.display="block";
+}
+function hideMsg(id){
+ const e=document.getElementById(id);
+ if(e)e.style.display="none";
+}
+function safeText(v){return v===null||v===undefined?"":String(v);}
+function formatDate(v){
+ if(!v)return "Not available";
+ const d=new Date(v);
+ return isNaN(d.getTime())?"Not available":d.toLocaleString();
+}
+function money(v){return "KSh "+Number(v||0).toLocaleString("en-KE");}
+function setButton(id,text,disabled){
+ const b=document.getElementById(id);
+ if(b){b.disabled=disabled;b.textContent=text;}
 }
 
 /* LOGIN / REGISTER SWITCH */
@@ -441,7 +414,6 @@ document.getElementById("showLogin").onclick=e=>{
  document.getElementById("registerBox").classList.add("hidden");
  document.getElementById("loginBox").classList.remove("hidden");
 };
-
 document.getElementById("showRegister").onclick=e=>{
  e.preventDefault();
  document.getElementById("loginBox").classList.add("hidden");
@@ -451,94 +423,65 @@ document.getElementById("showRegister").onclick=e=>{
 /* REGISTRATION */
 document.getElementById("registerForm").onsubmit=async e=>{
  e.preventDefault();
- const b=document.getElementById("registerButton");
- b.disabled=true;
- b.textContent="Creating account...";
+ setButton("registerButton","Creating account...",true);
  try{
   const name=document.getElementById("fullName").value.trim();
   const phone=normalizePhone(document.getElementById("registerPhone").value);
   const pass=document.getElementById("registerPassword").value;
-
   if(pass.length<8)throw Error("Password must have at least 8 characters.");
-  if(pass!==document.getElementById("confirmPassword").value){
-   throw Error("Passwords do not match.");
-  }
-
+  if(pass!==document.getElementById("confirmPassword").value)throw Error("Passwords do not match.");
   const {data,error}=await db.auth.signUp({
-   email:internalEmail(phone),
-   password:pass,
+   email:internalEmail(phone),password:pass,
    options:{data:{full_name:name,phone:phone}}
   });
-
   if(error)throw error;
-  if(!data.session){
-   throw Error("Registration needs an active session. Check Supabase email confirmation settings.");
-  }
-
+  if(!data.session)throw Error("Registration needs an active session. Check Supabase email confirmation settings.");
   currentUser=data.user;
   await loadBusiness();
- }catch(err){
-  showMsg("registerMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="CREATE ACCOUNT";
- }
+ }catch(err){showMsg("registerMessage",err.message,"error");}
+ finally{setButton("registerButton","CREATE ACCOUNT",false);}
 };
 
 /* LOGIN */
 document.getElementById("loginForm").onsubmit=async e=>{
  e.preventDefault();
- const b=document.getElementById("loginButton");
- b.disabled=true;
- b.textContent="Logging in...";
+ setButton("loginButton","Logging in...",true);
  try{
   const phone=normalizePhone(document.getElementById("loginPhone").value);
   const pass=document.getElementById("loginPassword").value;
-  const {data,error}=await db.auth.signInWithPassword({
-   email:internalEmail(phone),
-   password:pass
-  });
+  const {data,error}=await db.auth.signInWithPassword({email:internalEmail(phone),password:pass});
   if(error)throw error;
   currentUser=data.user;
   await loadBusiness();
- }catch(err){
-  showMsg("loginMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="LOGIN";
- }
+ }catch(err){showMsg("loginMessage",err.message,"error");}
+ finally{setButton("loginButton","LOGIN",false);}
 };
 
-/* LOAD EXISTING BUSINESS */
+/* LOAD BUSINESS */
 async function loadBusiness(){
- if(!currentUser){
-  showScreen("authScreen");
-  return;
- }
-
- const {data:profile,error:profileError}=await db.from("profiles")
-  .select("full_name,phone")
-  .eq("id",currentUser.id)
-  .maybeSingle();
-
- if(profileError)console.error("Profile:",profileError);
-
+ if(!currentUser){showScreen("authScreen");return;}
+ const {data:profile}=await db.from("profiles").select("full_name,phone").eq("id",currentUser.id).maybeSingle();
  const {data:businesses,error}=await db.from("businesses")
   .select("id,business_name,phone,currency,language,account_status")
-  .eq("owner_id",currentUser.id)
-  .limit(1);
-
+  .eq("owner_id",currentUser.id).limit(1);
  if(error){
   console.error(error);
   showScreen("setupScreen");
   showMsg("businessMessage","We couldn't load your business. Please refresh and try again.","error");
   return;
  }
-
  if(businesses&&businesses.length){
   currentBusiness=businesses[0];
+  if(currentBusiness.account_status==="suspended"||currentBusiness.account_status==="closed"){
+   showScreen("appScreen");
+   openPage("settingsPage");
+   await checkAdminAccess();
+   showMsg("paymentMessage","This business account is "+currentBusiness.account_status+". Please contact HESABORA support.","error");
+   return;
+  }
   await checkAdminAccess();
   showDashboard(profile);
+  await loadMySubscription();
  }else{
   showScreen("setupScreen");
   await checkAdminAccess();
@@ -548,32 +491,21 @@ async function loadBusiness(){
 /* CREATE BUSINESS */
 document.getElementById("businessForm").onsubmit=async e=>{
  e.preventDefault();
- const b=document.getElementById("businessButton");
- b.disabled=true;
- b.textContent="Creating business...";
+ setButton("businessButton","Creating business...",true);
  try{
   const name=document.getElementById("businessName").value.trim();
   const phone=normalizePhone(document.getElementById("businessPhone").value);
   const language=document.getElementById("businessLanguage").value;
-
   const {data,error}=await db.from("businesses").insert({
-   owner_id:currentUser.id,
-   business_name:name,
-   phone:phone,
-   currency:"KES",
-   language:language
+   owner_id:currentUser.id,business_name:name,phone:phone,currency:"KES",language:language
   }).select().single();
-
   if(error)throw error;
   currentBusiness=data;
   await checkAdminAccess();
   showDashboard();
- }catch(err){
-  showMsg("businessMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="CREATE BUSINESS";
- }
+  await loadMySubscription();
+ }catch(err){showMsg("businessMessage",err.message,"error");}
+ finally{setButton("businessButton","CREATE BUSINESS",false);}
 };
 
 /* ADMIN ACCESS */
@@ -581,75 +513,99 @@ async function checkAdminAccess(){
  currentAdmin=null;
  document.getElementById("adminAccessArea").classList.add("hidden");
  if(!currentUser)return;
-
  const {data,error}=await db.from("platform_admins")
-  .select("user_id,full_name,role,responsibilities,permissions,is_active")
-  .eq("user_id",currentUser.id)
-  .maybeSingle();
-
- if(error){
-  console.warn("Admin access check:",error.message);
-  return;
- }
-
- if(data&&data.is_active){
+  .select("user_id,full_name,role,responsibilities,permissions,is_active,status")
+  .eq("user_id",currentUser.id).maybeSingle();
+ if(error){console.warn("Admin access check:",error.message);return;}
+ if(data&&data.role&&data.status==="active"&&data.is_active!==false){
   currentAdmin=data;
   document.getElementById("adminAccessArea").classList.remove("hidden");
  }
 }
 
-/* SHOW DASHBOARD */
+/* DASHBOARD */
 function showDashboard(profile){
  showScreen("appScreen");
-
- document.getElementById("businessHeading").textContent=
-  "Welcome Back! 👋 "+(currentBusiness?.business_name||"");
-
- document.getElementById("ownerHeading").textContent=
-  (profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+
-  (currentBusiness?.phone||"");
-
- document.getElementById("settingsBusiness").textContent=
-  "Business: "+(currentBusiness?.business_name||"");
-
- document.getElementById("settingsPhone").textContent=
-  "Phone: "+(currentBusiness?.phone||"");
-
+ document.getElementById("businessHeading").textContent="Welcome Back! 👋 "+(currentBusiness?.business_name||"");
+ document.getElementById("ownerHeading").textContent=(profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+(currentBusiness?.phone||"");
+ document.getElementById("settingsBusiness").textContent="Business: "+(currentBusiness?.business_name||"");
+ document.getElementById("settingsPhone").textContent="Phone: "+(currentBusiness?.phone||"");
  openPage("dashboardPage");
 }
 
-/* CURRENT PREVIEW FORMS */
+/* SUBSCRIPTION */
+async function loadMySubscription(){
+ if(!currentBusiness)return;
+ const {data,error}=await db.rpc("hesabora_my_subscription");
+ if(error){
+  console.warn("Subscription:",error.message);
+  currentSubscription=null;
+  document.getElementById("subscriptionStatus").textContent="Subscription status could not be loaded.";
+  document.getElementById("settingsSubscription").textContent="Subscription: Unable to load";
+  return;
+ }
+ currentSubscription=data||{status:"expired"};
+ const status=currentSubscription.status||"expired";
+ const expired=status==="active"&&currentSubscription.expires_at&&new Date(currentSubscription.expires_at)<new Date();
+ if(expired)currentSubscription.status="expired";
+ const finalStatus=currentSubscription.status||"expired";
+ const expiry=currentSubscription.expires_at?" • Expires: "+formatDate(currentSubscription.expires_at):"";
+ document.getElementById("subscriptionStatus").innerHTML=
+  "<strong>HESABORA Business:</strong> <span class='status "+finalStatus+"'>"+finalStatus.toUpperCase()+"</span><p class='muted'>"+expiry+"</p>";
+ document.getElementById("settingsSubscription").textContent="Subscription: "+finalStatus.toUpperCase();
+}
+
+/* PAYMENT FORM */
+function showPaymentForm(){
+ document.getElementById("paymentForm").classList.remove("hidden");
+ document.getElementById("paymentForm").scrollIntoView({behavior:"smooth"});
+}
+function openSubscription(){
+ openPage("subscriptionPage");
+ loadMySubscription();
+}
+document.getElementById("subscriptionPaymentForm").onsubmit=async e=>{
+ e.preventDefault();
+ setButton("submitPaymentButton","Submitting...",true);
+ hideMsg("paymentMessage");
+ try{
+  const code=document.getElementById("mpesaCode").value.trim().toUpperCase();
+  const phone=normalizePhone(document.getElementById("paymentPhone").value);
+  if(code.length<6)throw Error("Enter a valid M-PESA transaction code.");
+  const {data,error}=await db.rpc("hesabora_submit_subscription_payment",{
+   p_mpesa_code:code,p_phone_number:phone
+  });
+  if(error)throw error;
+  if(data&&data.success===false)throw Error(data.message||"Payment submission failed.");
+  showMsg("paymentMessage","Payment submitted. Your subscription remains pending until Super Admin verifies the M-PESA payment.");
+  e.target.reset();
+ }catch(err){showMsg("paymentMessage",err.message,"error");}
+ finally{setButton("submitPaymentButton","SUBMIT PAYMENT",false);}
+};
+
+/* PREVIEW FORMS */
 document.getElementById("saleForm").onsubmit=e=>{
  e.preventDefault();
- showMsg("saleMessage","Preview only. Real transaction saving will be enabled after subscription and secure database integration.");
+ showMsg("saleMessage","Preview only. Real transaction saving will be enabled after database integration.");
 };
-
 document.getElementById("debtForm").onsubmit=e=>{
  e.preventDefault();
- showMsg("debtMessage","Preview only. Debt saving will be enabled after secure database integration.");
+ showMsg("debtMessage","Preview only. Debt saving will be enabled after database integration.");
 };
-
 document.getElementById("expenseForm").onsubmit=e=>{
  e.preventDefault();
- showMsg("expenseMessage","Preview only. Expense saving will be enabled after secure database integration.");
+ showMsg("expenseMessage","Preview only. Expense saving will be enabled after database integration.");
 };
 
 /* LOGOUT */
 document.getElementById("logoutButton").onclick=async()=>{
  await db.auth.signOut();
- currentUser=null;
- currentBusiness=null;
- currentAdmin=null;
+ currentUser=null;currentBusiness=null;currentAdmin=null;currentSubscription=null;
  showScreen("authScreen");
  document.getElementById("registerBox").classList.remove("hidden");
  document.getElementById("loginBox").classList.add("hidden");
-};
-
-/* NOTIFICATIONS AND PERIOD FILTERS */
-document.getElementById("notificationButton").onclick=()=>{
- alert("You have no new notifications.");
-};
-
+ NOTIFICATIONS / FILTERS */
+document.getElementById("notificationButton").onclick=()=>alert("You have no new notifications.");
 document.querySelectorAll(".filter").forEach(b=>{
  b.onclick=()=>{
   document.querySelectorAll(".filter").forEach(x=>x.style.background="#eaf1fb");
@@ -661,127 +617,771 @@ document.querySelectorAll(".filter").forEach(b=>{
 document.getElementById("voiceButton").onclick=()=>{
  const result=document.getElementById("voiceResult");
  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SpeechRecognition){
-  result.textContent="Voice recognition is not supported by this browser.";
+ if(!SpeechRecognition){result.textContent="Voice recognition is not supported by this browser.";return;}
+ const<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b80">
+<title>HESABORA</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f6fb;color:#18243b;font-family:Arial,sans-serif;padding-bottom:75px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.screen{display:none!important;min-height:100vh}
+.screen.active{display:block!important}
+header{background:linear-gradient(135deg,#102d68,#1976b9);color:white;padding:23px 17px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:25px;font-weight:900;letter-spacing:1px}
+.tagline{font-size:12px;margin-top:5px}
+.headername{font-size:17px;font-weight:bold;margin-top:24px}
+.headerphone{font-size:12px;margin-top:5px;opacity:.85}
+main{max-width:650px;margin:auto;padding:17px}
+.card{background:white;border-radius:17px;padding:20px;margin-bottom:16px;box-shadow:0 3px 15px #142d5010}
+h2{font-size:21px;margin:0 0 8px}
+h3{margin:0 0 8px;font-size:17px}
+.muted{color:#718096;font-size:13px}
+label{display:block;font-size:13px;font-weight:bold;margin:15px 0 6px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-radius:10px;background:white}
+.primary{background:#1769aa;color:white;border:0;padding:14px;border-radius:10px;font-weight:bold;width:100%;margin-top:16px}
+.secondary{background:#eaf1fb;color:#174b87;border:0;padding:12px;border-radius:10px;font-weight:bold}
+.danger{background:#ffe8e8;color:#a22;border:0;padding:12px;border-radius:10px;font-weight:bold}
+.message{padding:12px;border-radius:9px;margin-top:13px;font-size:13px;display:none;overflow-wrap:anywhere}
+.error{background:#ffe5e5;color:#a00000}
+.success{background:#e1f7e9;color:#176337}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.tile{border-radius:16px;padding:17px 13px;color:white;min-height:120px;border:0;text-align:left}
+.tile .icon{font-size:27px}
+.tile strong{display:block;font-size:15px;margin-top:12px}
+.tile small{display:block;margin-top:5px;opacity:.9}
+.blue{background:linear-gradient(135deg,#1685df,#1761b6)}
+.green{background:linear-gradient(135deg,#24b878,#078653)}
+.orange{background:linear-gradient(135deg,#ffad42,#e87916)}
+.red{background:linear-gradient(135deg,#fa6b6b,#d83c48)}
+.purple{background:linear-gradient(135deg,#a276ed,#7043bc)}
+.teal{background:linear-gradient(135deg,#27b9b4,#087f87)}
+.market{background:linear-gradient(120deg,#143d83,#168cba);color:white;padding:22px;border-radius:17px;margin:17px 0}
+.market h2{font-size:20px}
+.market button{width:48%;padding:13px;border:0;border-radius:10px;font-weight:bold;margin-top:13px}
+.market .sell{background:#ffca55;color:#26344b}
+.market .buy{background:white;color:#174b87}
+.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -3px 14px #00000012;z-index:20}
+.nav button{background:none;border:0;color:#52627a;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav .mic{background:#1769aa;color:white;width:53px;height:53px;border-radius:50%;font-size:23px;margin-top:-23px}
+.nav span{font-size:20px}
+.page-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;gap:8px}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.row button{flex:1}
+.item{padding:13px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
+.admin-badge{display:inline-block;padding:6px 10px;background:#eaf1fb;color:#174b87;border-radius:20px;font-size:12px;font-weight:bold}
+.status{display:inline-block;padding:5px 9px;border-radius:15px;font-size:11px;font-weight:bold;background:#eaf1fb;color:#174b87}
+.status.active,.status.approved{background:#e1f7e9;color:#176337}
+.status.pending{background:#fff2d9;color:#8a5a00}
+.status.suspended,.status.rejected,.status.closed,.status.expired{background:#ffe5e5;color:#a00000}
+.smallbtn{padding:9px 11px;border:0;border-radius:8px;font-size:12px;font-weight:bold;margin:5px 4px 0 0}
+footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
+hr{border:0;border-top:1px solid #edf0f5;margin:18px 0}
+@media(max-width:350px){.brand{font-size:21px}.grid{gap:8px}.tile{padding:13px}}
+</style>
+</head>
+<body>
+
+<section id="authScreen" class="screen">
+<header>
+<div class="brand">HESABORA</div>
+<div class="tagline">Your Business, Under Control.</div>
+<p>Manage Your Business. Grow With Confidence.</p>
+</header>
+<main>
+<div class="card" id="registerBox">
+<h2>Create Your Account</h2>
+<p class="muted">Join HESABORA today.</p>
+<form id="registerForm">
+<label>Full Name</label><input id="fullName" required placeholder="Your full name">
+<label>Phone Number</label><input id="registerPhone" required type="tel" placeholder="0712345678">
+<label>Password</label><input id="registerPassword" required type="password" minlength="8">
+<label>Confirm Password</label><input id="confirmPassword" required type="password" minlength="8">
+<button class="primary" id="registerButton">CREATE ACCOUNT</button>
+</form>
+<div id="registerMessage" class="message"></div>
+<p class="muted" style="text-align:center">Already registered? <a href="#" id="showLogin">Login</a></p>
+</div>
+
+<div class="card hidden" id="loginBox">
+<h2>Welcome Back!</h2>
+<p class="muted">Login to your HESABORA account.</p>
+<form id="loginForm">
+<label>Phone Number</label><input id="loginPhone" required type="tel" placeholder="0712345678">
+<label>Password</label><input id="loginPassword" required type="password">
+<button class="primary" id="loginButton">LOGIN</button>
+</form>
+<div id="loginMessage" class="message"></div>
+<p class="muted" style="text-align:center">New to HESABORA? <a href="#" id="showRegister">Create account</a></p>
+</div>
+</main>
+</section>
+
+<section id="setupScreen" class="screen">
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></header>
+<main>
+<div class="card">
+<h2>Register Your Business</h2>
+<p class="muted">Let's set up your business account.</p>
+<form id="businessForm">
+<label>Business Name</label><input id="businessName" required>
+<label>Business Phone Number</label><input id="businessPhone" required type="tel">
+<label>Preferred Language</label>
+<select id="businessLanguage"><option>English</option><option>Kiswahili</option></select>
+<button class="primary" id="businessButton">CREATE BUSINESS</button>
+</form>
+<div id="businessMessage" class="message"></div>
+</div>
+</main>
+</section>
+
+<section id="appScreen" class="screen">
+<header>
+<div class="top">
+<div><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></div>
+<button class="secondary" id="notificationButton">🔔</button>
+</div>
+<div class="headername" id="businessHeading">Welcome Back! 👋</div>
+<div class="headerphone" id="ownerHeading"></div>
+</header>
+
+<main>
+<div id="dashboardPage" class="appPage">
+<div class="page-title"><h2>Financial Overview</h2></div>
+<div class="row">
+<button class="secondary filter">Today</button><button class="secondary filter">Yesterday</button>
+<button class="secondary filter">Weekly</button><button class="secondary filter">Monthly</button>
+</div>
+<div class="grid">
+<button class="tile blue" onclick="openPage('recordPage')"><div class="icon">🧾</div><strong>Record</strong><small>Record a sale</small></button>
+<button class="tile green" onclick="openPage('salesPage')"><div class="icon">📈</div><strong>Today's Sales</strong><small>Cash and M-Pesa</small></button>
+<button class="tile orange" onclick="openPage('debtsPage')"><div class="icon">👥</div><strong>Debts</strong><small>Customer receivables</small></button>
+<button class="tile red" onclick="openPage('stockPage')"><div class="icon">📦</div><strong>Stock</strong><small>Products and inventory</small></button>
+<button class="tile purple" onclick="openPage('expensesPage')"><div class="icon">💸</div><strong>Expenses</strong><small>Business spending</small></button>
+<button class="tile teal" onclick="openPage('profitPage')"><div class="icon">💰</div><strong>Profit</strong><small>Business performance</small></button>
+</div>
+<div class="market">
+<h2>🛍️ HESABORA MARKET</h2><p>Discover products or sell your products to customers.</p>
+<button class="sell" onclick="openPage('marketPage')">SELL</button>
+<button class="buy" onclick="openPage('marketPage')">BUY</button>
+</div>
+<div class="card">
+<h3>Business Tools</h3>
+<div class="row"><button class="secondary" onclick="openPage('customersPage')">👥 Customers</button><button class="secondary" onclick="openPage('suppliersPage')">🏪 Suppliers</button></div>
+<div class="row"><button class="secondary" onclick="openPage('reportsPage')">📊 Reports</button><button class="secondary" onclick="openPage('settingsPage')">⚙️ Settings</button></div>
+</div>
+</div>
+
+<div id="recordPage" class="appPage hidden">
+<div class="page-title"><h2>Record a Sale</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><form id="saleForm">
+<label>Product Name (optional)</label><input id="saleProduct">
+<label>Mode of Payment</label><select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
+<label>Amount (KSh)</label><input id="saleAmount" type="number" min="0.01" step="0.01" required>
+<button class="primary">SAVE SALE</button>
+</form><div id="saleMessage" class="message"></div></div>
+</div>
+
+<div id="salesPage" class="appPage hidden">
+<div class="page-title"><h2>Sales Summary</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><div class="item">Cash Sales: <strong id="cashSales">KSh 0</strong></div><div class="item">M-Pesa Sales: <strong id="mpesaSales">KSh 0</strong></div><div class="item">Total Sales: <strong id="totalSales">KSh 0</strong></div></div>
+</div>
+
+<div id="debtsPage" class="appPage hidden">
+<div class="page-title"><h2>Customer Debts</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><form id="debtForm">
+<label>Customer Name</label><input id="debtCustomer" required>
+<label>Product Taken</label><input id="debtProduct" required>
+<label>Amount Owed (KSh)</label><input id="debtAmount" type="number" min="0.01" step="0.01" required>
+<button class="primary">SAVE DEBT</button>
+</form><div id="debtMessage" class="message"></div></div>
+</div>
+
+<div id="stockPage" class="appPage hidden">
+<div class="page-title"><h2>Stock Management</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><h3>Inventory</h3><p class="muted">Track products, quantities and purchase costs.</p><p>Stock management will be connected to live inventory in a later database integration step.</p></div>
+</div>
+
+<div id="expensesPage" class="appPage hidden">
+<div class="page-title"><h2>Expenses</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><form id="expenseForm">
+<label>Expense Type</label><input id="expenseType" required>
+<label>Amount (KSh)</label><input id="expenseAmount" type="number" min="0.01" step="0.01" required>
+<button class="primary">SAVE EXPENSE</button>
+</form><div id="expenseMessage" class="message"></div></div>
+</div>
+
+<div id="profitPage" class="appPage hidden">
+<div class="page-title"><h2>Profit Overview</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><h3>Business Profit</h3><p class="muted">Gross Profit = Sales − Cost of Goods Sold</p><p class="muted">Net Profit = Gross Profit − Expenses</p><p>Profit calculations will be enabled after stock costs and transactions are connected.</p></div>
+</div>
+
+<div id="customersPage" class="appPage hidden">
+<div class="page-title"><h2>Customers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><p>Customer records and purchase history.</p><p class="muted">Customer database integration is coming next.</p></div>
+</div>
+
+<div id="suppliersPage" class="appPage hidden">
+<div class="page-title"><h2>Suppliers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><p>Manage suppliers and purchase records.</p><p class="muted">Supplier database integration is coming next.</p></div>
+</div>
+
+<div id="marketPage" class="appPage hidden">
+<div class="page-title"><h2>HESABORA MARKET</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><h2>Welcome to HESABORA MARKET</h2><p class="muted">Buy and sell products.</p><button class="primary" onclick="openPage('sellPage')">🛒 SELL PRODUCTS</button><button class="primary" onclick="openPage('buyPage')">🔎 BUY PRODUCTS</button></div>
+</div>
+
+<div id="sellPage" class="appPage hidden"><div class="page-title"><h2>Sell Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div><div class="card"><p>Seller registration and paid listing packages will be connected in the Market development stage.</p></div></div>
+<div id="buyPage" class="appPage hidden"><div class="page-title"><h2>Buy Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div><div class="card"><p>Product browsing and seller contact will be connected in the Market development stage.</p></div></div>
+
+<div id="reportsPage" class="appPage hidden">
+<div class="page-title"><h2>Reports</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card"><p>Daily, weekly and monthly business reports will be connected to live records.</p></div>
+</div>
+
+<!-- SUBSCRIPTION -->
+<div id="subscriptionPage" class="appPage hidden">
+<div class="page-title"><h2>Subscription</h2><button class="secondary" onclick="openPage('settingsPage')">← Back</button></div>
+<div class="card">
+<h3>HESABORA Business</h3>
+<p style="font-size:30px;font-weight:bold;color:#1769aa">KSh 300 <small style="font-size:13px">/ 30 days</small></p>
+<p class="muted">Your subscription gives you access to HESABORA Business services.</p>
+<div id="subscriptionStatus" class="item">Loading subscription...</div>
+<button class="primary" onclick="showPaymentForm()">PAY WITH M-PESA</button>
+<div id="paymentForm" class="hidden">
+<hr>
+<h3>Pay by M-PESA</h3>
+<p>Send <strong>KSh 300</strong> to this phone number:</p>
+<div style="font-size:25px;font-weight:bold;color:#1769aa;text-align:center;padding:12px">0114772821</div>
+<p class="muted">After sending the money, enter the M-PESA transaction code below. Your subscription will only activate after Super Admin verifies the payment.</p>
+<form id="subscriptionPaymentForm">
+<label>M-PESA Transaction Code</label><input id="mpesaCode" required maxlength="30" placeholder="e.g. QWE1234567">
+<label>Phone number used to pay</label><input id="paymentPhone" required type="tel" placeholder="07XXXXXXXX">
+<button class="primary" id="submitPaymentButton">SUBMIT PAYMENT</button>
+</form>
+<div id="paymentMessage" class="message"></div>
+</div>
+</div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settingsPage" class="appPage hidden">
+<div class="page-title"><h2>Settings</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card">
+<h3>Business Settings</h3>
+<p id="settingsBusiness"></p><p id="settingsPhone"></p>
+<p id="settingsSubscription" class="muted">Subscription: Checking...</p>
+<button class="primary" onclick="openSubscription()">💳 SUBSCRIPTION & PAYMENTS</button>
+<div id="adminAccessArea" class="hidden">
+<hr><h3>System Administration</h3>
+<p class="muted">Separate portal for authorised administrators.</p>
+<button class="primary" id="openAdminButton">🔐 OPEN ADMIN PORTAL</button>
+</div>
+<button class="danger" id="logoutButton" style="width:100%;margin-top:20px">LOG OUT</button>
+</div>
+</div>
+
+<!-- ADMIN PORTAL -->
+<div id="adminPortalPage" class="appPage hidden">
+<div class="page-title"><h2>Admin Portal</h2><button class="secondary" onclick="openPage('settingsPage')">← Back</button></div>
+<div class="card">
+<h3>HESABORA Administration</h3><p id="adminIdentity"></p>
+<span class="admin-badge" id="adminRoleBadge">ADMIN</span>
+</div>
+
+<div id="superAdminTools" class="hidden">
+<div class="card">
+<h3>Pending M-PESA Payments</h3>
+<button class="secondary" onclick="loadPendingPayments()" style="width:100%">REFRESH PAYMENTS</button>
+<div id="pendingPaymentsList"><p class="muted">Loading...</p></div>
+<div id="paymentReviewMessage" class="message"></div>
+</div>
+
+<div class="card">
+<h3>Registered Businesses</h3>
+<button class="secondary" onclick="loadBusinesses()" style="width:100%">REFRESH BUSINESSES</button>
+<div id="businessAdminList"><p class="muted">Loading...</p></div>
+<div id="businessAdminMessage" class="message"></div>
+</div>
+
+<div class="card">
+<h3>Registered Admins</h3>
+<button class="secondary" onclick="loadAdminList()" style="width:100%">REFRESH ADMINS</button>
+<div id="adminList"><p class="muted">Loading...</p></div>
+<div id="adminListMessage" class="message"></div>
+</div>
+
+<div class="card">
+<h3>Add Existing HESABORA Admin</h3>
+<p class="muted">The person must already have a HESABORA account. Enter their Supabase User ID.</p>
+<form id="addAdminForm">
+<label>User ID (UUID)</label><input id="newAdminUserId" required placeholder="Supabase User ID">
+<label>Full Name</label><input id="newAdminName" required>
+<label>Responsibilities</label>
+<select id="newAdminResponsibilities" multiple size="5">
+<option value="payment_approval">Payment Approval</option>
+<option value="customer_support">Customer Support</option>
+<option value="business_verification">Business Verification</option>
+<option value="market_management">Market Management</option>
+<option value="reports">Reports</option>
+</select>
+<button class="primary">ADD ADMIN</button>
+</form>
+<div id="addAdminMessage" class="message"></div>
+<p class="muted">Adding an admin requires an authorised database policy or server-side admin function.</p>
+</div>
+</div>
+
+<div id="regularAdminInfo" class="card hidden">
+<h3>Your Admin Access</h3><p class="muted">Your permissions are assigned by the HESABORA Super Admin.</p>
+<div id="myResponsibilities"></div>
+</div>
+
+<div class="card">
+<h3>Admin Activity</h3>
+<div id="adminActivityList"><p class="muted">Activity history will appear here when available.</p></div>
+</div>
+</div>
+
+<!-- VOICE -->
+<div id="voicePage" class="appPage hidden">
+<div class="page-title"><h2>Voice Assistant</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="card" style="text-align:center">
+<div style="font-size:55px">🎙️</div><h3>HESABORA Voice Assistant</h3>
+<p class="muted">Speak in English or Kiswahili to record business activities.</p>
+<button class="primary" id="voiceButton">START SPEAKING</button>
+<p id="voiceResult"></p>
+<p class="muted">Voice recognition currently displays speech only; it does not save transactions.</p>
+</div>
+</div>
+</main>
+
+<nav class="nav">
+<button onclick="openPage('dashboardPage')"><span>🏠</span>Dashboard</button>
+<button onclick="openPage('customersPage')"><span>👥</span>Customers</button>
+<button class="mic" onclick="openPage('voicePage')">🎙️</button>
+<button onclick="openPage('suppliersPage')"><span>🏪</span>Suppliers</button>
+<button onclick="openPage('settingsPage')"><span>⚙️</span>Settings</button>
+</nav>
+<footer>HESABORA © 2026 • Your Business, Your Future.</footer>
+</section>
+
+<script>
+const SUPABASE_URL="https://ivdvfacwjygnrnnstbji.supabase.co";
+const SUPABASE_KEY="sb_publishable_GXaoW9fbDamZKxsWFEEQvw_bS71EhYU";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null;
+let currentBusiness=null;
+let currentAdmin=null;
+let currentSubscription=null;
+
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ const s=document.getElementById(id);
+ if(s)s.classList.add("active");
+ window.scrollTo(0,0);
+}
+function openPage(id){
+ document.querySelectorAll(".appPage").forEach(p=>p.classList.add("hidden"));
+ const p=document.getElementById(id);
+ if(p)p.classList.remove("hidden");
+ window.scrollTo(0,0);
+}
+function normalizePhone(v){
+ let p=v.replace(/[\s\-()]/g,"");
+ if(/^0[17]\d{8}$/.test(p))p="+254"+p.substring(1);
+ else if(/^254[17]\d{8}$/.test(p))p="+"+p;
+ else if(/^[17]\d{8}$/.test(p))p="+254"+p;
+ if(!/^\+254[17]\d{8}$/.test(p))throw Error("Enter a valid Kenyan number, e.g. 0712345678.");
+ return p;
+}
+function internalEmail(phone){return phone.replace("+","")+"@login.hesabora.app";}
+function showMsg(id,msg,type="success"){
+ const e=document.getElementById(id);
+ if(!e)return;
+ e.textContent=msg;
+ e.className="message "+type;
+ e.style.display="block";
+}
+function hideMsg(id){
+ const e=document.getElementById(id);
+ if(e)e.style.display="none";
+}
+function safeText(v){return v===null||v===undefined?"":String(v);}
+function formatDate(v){
+ if(!v)return "Not available";
+ const d=new Date(v);
+ return isNaN(d.getTime())?"Not available":d.toLocaleString();
+}
+function money(v){return "KSh "+Number(v||0).toLocaleString("en-KE");}
+function setButton(id,text,disabled){
+ const b=document.getElementById(id);
+ if(b){b.disabled=disabled;b.textContent=text;}
+}
+
+/* LOGIN / REGISTER SWITCH */
+document.getElementById("showLogin").onclick=e=>{
+ e.preventDefault();
+ document.getElementById("registerBox").classList.add("hidden");
+ document.getElementById("loginBox").classList.remove("hidden");
+};
+document.getElementById("showRegister").onclick=e=>{
+ e.preventDefault();
+ document.getElementById("loginBox").classList.add("hidden");
+ document.getElementById("registerBox").classList.remove("hidden");
+};
+
+/* REGISTRATION */
+document.getElementById("registerForm").onsubmit=async e=>{
+ e.preventDefault();
+ setButton("registerButton","Creating account...",true);
+ try{
+  const name=document.getElementById("fullName").value.trim();
+  const phone=normalizePhone(document.getElementById("registerPhone").value);
+  const pass=document.getElementById("registerPassword").value;
+  if(pass.length<8)throw Error("Password must have at least 8 characters.");
+  if(pass!==document.getElementById("confirmPassword").value)throw Error("Passwords do not match.");
+  const {data,error}=await db.auth.signUp({
+   email:internalEmail(phone),password:pass,
+   options:{data:{full_name:name,phone:phone}}
+  });
+  if(error)throw error;
+  if(!data.session)throw Error("Registration needs an active session. Check Supabase email confirmation settings.");
+  currentUser=data.user;
+  await loadBusiness();
+ }catch(err){showMsg("registerMessage",err.message,"error");}
+ finally{setButton("registerButton","CREATE ACCOUNT",false);}
+};
+
+/* LOGIN */
+document.getElementById("loginForm").onsubmit=async e=>{
+ e.preventDefault();
+ setButton("loginButton","Logging in...",true);
+ try{
+  const phone=normalizePhone(document.getElementById("loginPhone").value);
+  const pass=document.getElementById("loginPassword").value;
+  const {data,error}=await db.auth.signInWithPassword({email:internalEmail(phone),password:pass});
+  if(error)throw error;
+  currentUser=data.user;
+  await loadBusiness();
+ }catch(err){showMsg("loginMessage",err.message,"error");}
+ finally{setButton("loginButton","LOGIN",false);}
+};
+
+/* LOAD BUSINESS */
+async function loadBusiness(){
+ if(!currentUser){showScreen("authScreen");return;}
+ const {data:profile}=await db.from("profiles").select("full_name,phone").eq("id",currentUser.id).maybeSingle();
+ const {data:businesses,error}=await db.from("businesses")
+  .select("id,business_name,phone,currency,language,account_status")
+  .eq("owner_id",currentUser.id).limit(1);
+ if(error){
+  console.error(error);
+  showScreen("setupScreen");
+  showMsg("businessMessage","We couldn't load your business. Please refresh and try again.","error");
   return;
  }
+ if(businesses&&businesses.length){
+  currentBusiness=businesses[0];
+  if(currentBusiness.account_status==="suspended"||currentBusiness.account_status==="closed"){
+   showScreen("appScreen");
+   openPage("settingsPage");
+   await checkAdminAccess();
+   showMsg("paymentMessage","This business account is "+currentBusiness.account_status+". Please contact HESABORA support.","error");
+   return;
+  }
+  await checkAdminAccess();
+  showDashboard(profile);
+  await loadMySubscription();
+ }else{
+  showScreen("setupScreen");
+  await checkAdminAccess();
+ }
+}
+
+/* CREATE BUSINESS */
+document.getElementById("businessForm").onsubmit=async e=>{
+ e.preventDefault();
+ setButton("businessButton","Creating business...",true);
+ try{
+  const name=document.getElementById("businessName").value.trim();
+  const phone=normalizePhone(document.getElementById("businessPhone").value);
+  const language=document.getElementById("businessLanguage").value;
+  const {data,error}=await db.from("businesses").insert({
+   owner_id:currentUser.id,business_name:name,phone:phone,currency:"KES",language:language
+  }).select().single();
+  if(error)throw error;
+  currentBusiness=data;
+  await checkAdminAccess();
+  showDashboard();
+  await loadMySubscription();
+ }catch(err){showMsg("businessMessage",err.message,"error");}
+ finally{setButton("businessButton","CREATE BUSINESS",false);}
+};
+
+/* ADMIN ACCESS */
+async function checkAdminAccess(){
+ currentAdmin=null;
+ document.getElementById("adminAccessArea").classList.add("hidden");
+ if(!currentUser)return;
+ const {data,error}=await db.from("platform_admins")
+  .select("user_id,full_name,role,responsibilities,permissions,is_active,status")
+  .eq("user_id",currentUser.id).maybeSingle();
+ if(error){console.warn("Admin access check:",error.message);return;}
+ if(data&&data.role&&data.status==="active"&&data.is_active!==false){
+  currentAdmin=data;
+  document.getElementById("adminAccessArea").classList.remove("hidden");
+ }
+}
+
+/* DASHBOARD */
+function showDashboard(profile){
+ showScreen("appScreen");
+ document.getElementById("businessHeading").textContent="Welcome Back! 👋 "+(currentBusiness?.business_name||"");
+ document.getElementById("ownerHeading").textContent=(profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+(currentBusiness?.phone||"");
+ document.getElementById("settingsBusiness").textContent="Business: "+(currentBusiness?.business_name||"");
+ document.getElementById("settingsPhone").textContent="Phone: "+(currentBusiness?.phone||"");
+ openPage("dashboardPage");
+}
+
+/* SUBSCRIPTION */
+async function loadMySubscription(){
+ if(!currentBusiness)return;
+ const {data,error}=await db.rpc("hesabora_my_subscription");
+ if(error){
+  console.warn("Subscription:",error.message);
+  currentSubscription=null;
+  document.getElementById("subscriptionStatus").textContent="Subscription status could not be loaded.";
+  document.getElementById("settingsSubscription").textContent="Subscription: Unable to load";
+  return;
+ }
+ currentSubscription=data||{status:"expired"};
+ const status=currentSubscription.status||"expired";
+ const expired=status==="active"&&currentSubscription.expires_at&&new Date(currentSubscription.expires_at)<new Date();
+ if(expired)currentSubscription.status="expired";
+ const finalStatus=currentSubscription.status||"expired";
+ const expiry=currentSubscription.expires_at?" • Expires: "+formatDate(currentSubscription.expires_at):"";
+ document.getElementById("subscriptionStatus").innerHTML=
+  "<strong>HESABORA Business:</strong> <span class='status "+finalStatus+"'>"+finalStatus.toUpperCase()+"</span><p class='muted'>"+expiry+"</p>";
+ document.getElementById("settingsSubscription").textContent="Subscription: "+finalStatus.toUpperCase();
+}
+
+/* PAYMENT FORM */
+function showPaymentForm(){
+ document.getElementById("paymentForm").classList.remove("hidden");
+ document.getElementById("paymentForm").scrollIntoView({behavior:"smooth"});
+}
+function openSubscription(){
+ openPage("subscriptionPage");
+ loadMySubscription();
+}
+document.getElementById("subscriptionPaymentForm").onsubmit=async e=>{
+ e.preventDefault();
+ setButton("submitPaymentButton","Submitting...",true);
+ hideMsg("paymentMessage");
+ try{
+  const code=document.getElementById("mpesaCode").value.trim().toUpperCase();
+  const phone=normalizePhone(document.getElementById("paymentPhone").value);
+  if(code.length<6)throw Error("Enter a valid M-PESA transaction code.");
+  const {data,error}=await db.rpc("hesabora_submit_subscription_payment",{
+   p_mpesa_code:code,p_phone_number:phone
+  });
+  if(error)throw error;
+  if(data&&data.success===false)throw Error(data.message||"Payment submission failed.");
+  showMsg("paymentMessage","Payment submitted. Your subscription remains pending until Super Admin verifies the M-PESA payment.");
+  e.target.reset();
+ }catch(err){showMsg("paymentMessage",err.message,"error");}
+ finally{setButton("submitPaymentButton","SUBMIT PAYMENT",false);}
+};
+
+/* PREVIEW FORMS */
+document.getElementById("saleForm").onsubmit=e=>{
+ e.preventDefault();
+ showMsg("saleMessage","Preview only. Real transaction saving will be enabled after database integration.");
+};
+document.getElementById("debtForm").onsubmit=e=>{
+ e.preventDefault();
+ showMsg("debtMessage","Preview only. Debt saving will be enabled after database integration.");
+};
+document.getElementById("expenseForm").onsubmit=e=>{
+ e.preventDefault();
+ showMsg("expenseMessage","Preview only. Expense saving will be enabled after database integration.");
+};
+
+/* LOGOUT */
+document.getElementById("logoutButton").onclick=async()=>{
+ await db.auth.signOut();
+ currentUser=null;currentBusiness=null;currentAdmin=null;currentSubscription=null;
+ showScreen("authScreen");
+ document.getElementById("registerBox").classList.remove("hidden");
+ document.getElementById("loginBox").classList.add("hidden");
+};
+
+/* NOTIFICATIONS / FILTERS */
+document.getElementById("notificationButton").onclick=()=>alert("You have no new notifications.");
+document.querySelectorAll(".filter").forEach(b=>{
+ b.onclick=()=>{
+  document.querySelectorAll(".filter").forEach(x=>x.style.background="#eaf1fb");
+  b.style.background="#c8dcf5";
+ };
+});
+
+/* VOICE */
+document.getElementById("voiceButton").onclick=()=>{
+ const result=document.getElementById("voiceResult");
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){result.textContent="Voice recognition is not supported by this browser.";return;}
  const recognition=new SpeechRecognition();
  recognition.lang="sw-KE";
- recognition.onresult=e=>{
-  result.textContent="You said: "+e.results[0][0].transcript;
- };
- recognition.onerror=()=>{
-  result.textContent="Could not recognise speech. Please try again.";
- };
+ recognition.onresult=e=>{result.textContent="You said: "+e.results[0][0].transcript;};
+ recognition.onerror=()=>{result.textContent="Could not recognise speech. Please try again.";};
  recognition.start();
 };
 
 /* ADMIN PORTAL */
 document.getElementById("openAdminButton").onclick=async()=>{
- if(!currentAdmin||!currentAdmin.is_active){
-  alert("You are not authorised to access Admin Portal.");
+ if(!currentAdmin||currentAdmin.role!=="super_admin"||currentAdmin.status!=="active"){
+  alert("Super Admin access required.");
   return;
  }
-
- document.getElementById("adminIdentity").textContent=
-  "Signed in as: "+(currentAdmin.full_name||currentUser.id);
-
- document.getElementById("adminRoleBadge").textContent=
-  currentAdmin.role.replaceAll("_"," ").toUpperCase();
-
- const isSuper=currentAdmin.role==="super_admin";
-
- document.getElementById("superAdminTools").classList.toggle("hidden",!isSuper);
- document.getElementById("regularAdminInfo").classList.toggle("hidden",isSuper);
-
- document.getElementById("myResponsibilities").textContent=
-  Array.isArray(currentAdmin.responsibilities)
-  ?currentAdmin.responsibilities.join(", ")
-  :"No responsibilities assigned.";
-
+ document.getElementById("adminIdentity").textContent="Signed in as: "+(currentAdmin.full_name||currentUser.id);
+ document.getElementById("adminRoleBadge").textContent=currentAdmin.role.replaceAll("_"," ").toUpperCase();
+ document.getElementById("superAdminTools").classList.remove("hidden");
+ document.getElementById("regularAdminInfo").classList.add("hidden");
  openPage("adminPortalPage");
- await loadAdminActivity();
- if(isSuper)await loadAdminList();
+ await Promise.all([loadPendingPayments(),loadBusinesses(),loadAdminList(),loadAdminActivity()]);
 };
 
 async function writeAdminLog(action,details={}){
  const {error}=await db.from("admin_activity_logs").insert({
-  admin_user_id:currentUser.id,
-  action,
-  details
+  admin_user_id:currentUser.id,action,details
  });
  if(error)console.warn("Activity log could not be saved:",error.message);
 }
 
+/* PENDING PAYMENTS */
+async function loadPendingPayments(){
+ const box=document.getElementById("pendingPaymentsList");
+ box.innerHTML="<p class='muted'>Loading pending payments...</p>";
+ const {data,error}=await db.rpc("hesabora_pending_payments");
+ if(error){box.textContent="Could not load payments: "+error.message;return;}
+ const rows=Array.isArray(data)?data:[];
+ if(!rows.length){box.innerHTML="<p class='muted'>No pending payments.</p>";return;}
+ box.innerHTML="";
+ rows.forEach(p=>{
+  const card=document.createElement("div");card.className="item";
+  const title=document.createElement("strong");title.textContent=p.business_name||"Business";
+  const details=document.createElement("p");details.className="muted";
+  details.textContent="Amount: "+money(p.amount_kes)+" • M-PESA: "+p.mpesa_code+
+   " • Payer: "+(p.payment_phone||"Not supplied")+" • Submitted: "+formatDate(p.created_at);
+  const note=document.createElement("p");note.className="muted";
+  note.textContent="Verify this transaction in the receiving M-PESA account before approving.";
+  const approve=document.createElement("button");approve.className="smallbtn secondary";approve.textContent="APPROVE";
+  approve.onclick=()=>reviewPayment(p.id,"approve");
+  const reject=document.createElement("button");reject.className="smallbtn danger";reject.textContent="REJECT";
+  reject.onclick=()=>reviewPayment(p.id,"reject");
+  card.append(title,details,note,approve,reject);box.appendChild(card);
+ });
+}
+async function reviewPayment(id,decision){
+ if(!confirm("Have you verified this M-PESA transaction in your receiving account? "+(decision==="approve"?"Approve payment?":"Reject payment?")))return;
+ const {data,error}=await db.rpc("hesabora_review_subscription_payment",{
+  p_payment_id:id,p_decision:decision
+ });
+ if(error){showMsg("paymentReviewMessage",error.message,"error");return;}
+ showMsg("paymentReviewMessage","Payment "+decision+"d successfully.");
+ await loadPendingPayments();
+ await writeAdminLog("subscription_payment_"+decision,{payment_id:id});
+ await loadAdminActivity();
+}
+
+/* BUSINESS MANAGEMENT */
+async function loadBusinesses(){
+ const box=document.getElementById("businessAdminList");
+ box.innerHTML="<p class='muted'>Loading businesses...</p>";
+ const {data,error}=await db.rpc("hesabora_admin_business_list");
+ if(error){box.textContent="Could not load businesses: "+error.message;return;}
+ const rows=Array.isArray(data)?data:[];
+ if(!rows.length){box.innerHTML="<p class='muted'>No businesses found.</p>";return;}
+ box.innerHTML="";
+ rows.forEach(b=>{
+  const card=document.createElement("div");card.className="item";
+  const title=document.createElement("strong");title.textContent=b.business_name||"Unnamed business";
+  const info=document.createElement("p");info.className="muted";
+  info.textContent="Owner: "+(b.owner_name||"Not supplied")+
+   " • Phone: "+(b.owner_phone||b.business_phone||"Not supplied")+
+   " • Joined: "+formatDate(b.joined_at);
+  const sub=document.createElement("p");sub.className="muted";
+  sub.textContent="Subscription: "+(b.subscription_status||"No subscription")+
+   (b.expires_at?" • Expires: "+formatDate(b.expires_at):"");
+  const status=document.createElement("span");status.className="status "+(b.account_status||"");
+  status.textContent=(b.account_status||"unknown").toUpperCase();
+  const actions=document.createElement("div");
+  if(b.account_status!=="closed"){
+   const btn=document.createElement("button");
+   btn.className="smallbtn "+(b.account_status==="active"?"danger":"secondary");
+   btn.textContent=b.account_status==="active"?"SUSPEND BUSINESS":"ACTIVATE BUSINESS";
+   btn.onclick=()=>changeBusinessStatus(b.business_id,b.account_status==="active"?"suspended":"active");
+   actions.appendChild(btn);
+  }
+  card.append(title,info,sub,status,actions);box.appendChild(card);
+ });
+}
+async function changeBusinessStatus(id,status){
+ if(!confirm("Change this business account status to "+status+"?"))return;
+ const {data,error}=await db.rpc("hesabora_set_business_status",{
+  p_business_id:id,p_new_status:status
+ });
+ if(error){showMsg("businessAdminMessage",error.message,"error");return;}
+ showMsg("businessAdminMessage","Business status updated.");
+ await loadBusinesses();
+ await writeAdminLog("business_status_changed",{business_id:id,new_status:status});
+ await loadAdminActivity();
+}
+
+/* ADMIN LIST */
 async function loadAdminList(){
  const box=document.getElementById("adminList");
  box.innerHTML="<p class='muted'>Loading admins...</p>";
-
- const {data,error}=await db.from("platform_admins")
-  .select("user_id,full_name,role,responsibilities,permissions,is_active,created_at")
-  .order("created_at",{ascending:false});
-
- if(error){
-  box.textContent="Could not load admins: "+error.message;
-  return;
- }
-
- if(!data||!data.length){
-  box.innerHTML="<p class='muted'>No admins found.</p>";
-  return;
- }
-
+ const {data,error}=await db.rpc("hesabora_admin_list");
+ if(error){box.textContent="Could not load admins: "+error.message;return;}
+ const rows=Array.isArray(data)?data:[];
+ if(!rows.length){box.innerHTML="<p class='muted'>No admins found.</p>";return;}
  box.innerHTML="";
-
- data.forEach(admin=>{
-  const card=document.createElement("div");
-  card.className="item";
-
-  const name=document.createElement("strong");
-  name.textContent=admin.full_name||"Unnamed admin";
-
-  const role=document.createElement("div");
-  role.className="muted";
-  role.textContent=admin.role+" • "+(admin.is_active?"Active":"Inactive");
-
-  const uid=document.createElement("div");
-  uid.className="muted";
-  uid.textContent=admin.user_id;
-
-  card.append(name,role,uid);
-
-  if(admin.role!=="super_admin"&&admin.user_id!==currentUser.id){
+ rows.forEach(a=>{
+  const card=document.createElement("div");card.className="item";
+  const name=document.createElement("strong");name.textContent=a.full_name||"Unnamed admin";
+  const info=document.createElement("p");info.className="muted";
+  info.textContent=(a.role||"admin")+" • "+(a.status||"unknown");
+  const uid=document.createElement("p");uid.className="muted";uid.textContent=a.user_id;
+  card.append(name,info,uid);
+  if(a.role!=="super_admin"&&a.user_id!==currentUser.id){
    const btn=document.createElement("button");
-   btn.className=admin.is_active?"danger":"secondary";
-   btn.style.marginTop="9px";
-   btn.textContent=admin.is_active?"DEACTIVATE ADMIN":"ACTIVATE ADMIN";
-   btn.onclick=()=>toggleAdmin(admin);
+   btn.className="smallbtn "+(a.status==="active"?"danger":"secondary");
+   btn.textContent=a.status==="active"?"SUSPEND ADMIN":"ACTIVATE ADMIN";
+   btn.onclick=()=>toggleAdmin(a);
    card.appendChild(btn);
   }
-
   box.appendChild(card);
  });
 }
-
 async function toggleAdmin(admin){
  if(!currentAdmin||currentAdmin.role!=="super_admin")return;
-
- const next=!admin.is_active;
- if(!confirm((next?"Activate":"Deactivate")+" "+(admin.full_name||"this admin")+"?"))return;
-
- const {error}=await db.from("platform_admins")
-  .update({is_active:next,updated_at:new Date().toISOString()})
-  .eq("user_id",admin.user_id);
-
- if(error){
-  showMsg("adminListMessage",error.message,"error");
-  return;
- }
-
- await writeAdminLog(next?"admin_activated":"admin_deactivated",{
-  target_user_id:admin.user_id
+ const next=admin.status==="active"?"suspended":"active";
+ if(!confirm((next==="active"?"Activate ":"Suspend ")+(admin.full_name||"this admin")+"?"))return;
+ const {data,error}=await db.rpc("hesabora_set_admin_status",{
+  p_admin_user_id:admin.user_id,p_new_status:next
  });
-
+ if(error){showMsg("adminListMessage",error.message,"error");return;}
  showMsg("adminListMessage","Admin status updated.");
  await loadAdminList();
  await loadAdminActivity();
@@ -790,115 +1390,133 @@ async function toggleAdmin(admin){
 /* ADD ADMIN */
 document.getElementById("addAdminForm").onsubmit=async e=>{
  e.preventDefault();
-
  if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  showMsg("addAdminMessage","Super Admin access required.","error");
-  return;
+  showMsg("addAdminMessage","Super Admin access required.","error");return;
  }
-
  const userId=document.getElementById("newAdminUserId").value.trim();
  const fullName=document.getElementById("newAdminName").value.trim();
- const role=document.getElementById("newAdminRole").value;
-
- const responsibilities=[
-  ...document.getElementById("newAdminResponsibilities").selectedOptions
- ].map(o=>o.value);
-
+ const responsibilities=[...document.getElementById("newAdminResponsibilities").selectedOptions].map(o=>o.value);
  if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)){
-  showMsg("addAdminMessage","Enter a valid Supabase User ID (UUID).","error");
-  return;
+  showMsg("addAdminMessage","Enter a valid Supabase User ID (UUID).","error");return;
  }
-
- if(userId===currentUser.id){
-  showMsg("addAdminMessage","You are already the Super Admin.","error");
-  return;
- }
-
- const {error}=await db.from("platform_admins").upsert({
-  user_id:userId,
-  full_name:fullName,
-  role,
-  responsibilities,
-  permissions:{},
-  is_active:true,
-  created_by:currentUser.id,
-  updated_at:new Date().toISOString()
- },{onConflict:"user_id"});
-
- if(error){
-  showMsg("addAdminMessage","Could not add admin: "+error.message,"error");
-  return;
- }
-
- await writeAdminLog("admin_added",{
-  target_user_id:userId,
-  role,
-  responsibilities
- });
-
- e.target.reset();
- showMsg("addAdminMessage","Admin added successfully.");
- await loadAdminList();
- await loadAdminActivity();
+ if(userId===currentUser.id){showMsg("addAdminMessage","You are already the Super Admin.","error");return;}
+ showMsg("addAdminMessage","Admin creation needs a protected server-side function. It has not been submitted. Do not add admins directly through an unprotected browser request.","error");
 };
-
-document.getElementById("refreshAdminsButton").onclick=loadAdminList;
 
 /* ADMIN ACTIVITY */
 async function loadAdminActivity(){
  const box=document.getElementById("adminActivityList");
-
  const {data,error}=await db.from("admin_activity_logs")
   .select("admin_user_id,action,details,created_at")
-  .order("created_at",{ascending:false})
-  .limit(20);
-
- if(error){
-  box.textContent="Activity logs unavailable: "+error.message;
-  return;
- }
-
- if(!data||!data.length){
-  box.innerHTML="<p class='muted'>No admin activity recorded yet.</p>";
-  return;
- }
-
+  .order("created_at",{ascending:false}).limit(30);
+ if(error){box.textContent="Activity logs unavailable: "+error.message;return;}
+ if(!data||!data.length){box.innerHTML="<p class='muted'>No admin activity recorded yet.</p>";return;}
  box.innerHTML="";
-
  data.forEach(log=>{
-  const div=document.createElement("div");
-  div.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=log.action.replaceAll("_"," ");
-
-  const detail=document.createElement("div");
-  detail.className="muted";
-  detail.textContent=(log.admin_user_id||"Unknown admin")+" • "+
-   new Date(log.created_at).toLocaleString();
-
-  div.append(title,detail);
-  box.appendChild(div);
+  const div=document.createElement("div");div.className="item";
+  const title=document.createElement("strong");title.textContent=(log.action||"activity").replaceAll("_"," ");
+  const detail=document.createElement("div");detail.className="muted";
+  detail.textContent=(log.admin_user_id||"Unknown admin")+" • "+formatDate(log.created_at);
+  div.append(title,detail);box.appendChild(div);
  });
 }
 
-/* APP STARTUP */
+/* STARTUP */
 (async()=>{
  try{
   showScreen("authScreen");
-
   const {data:{session},error}=await db.auth.getSession();
   if(error)throw error;
-
-  if(session){
-   currentUser=session.user;
-   await loadBusiness();
-  }
- }catch(err){
-  console.error("HESABORA startup error:",err);
-  showScreen("authScreen");
- }
+  if(session){currentUser=session.user;await loadBusiness();}
+ }catch(err){console.error("HESABORA startup error:",err);showScreen("authScreen");}
 })();
 </script>
 </body>
- </html>
+</html>￼Enter recognition=new SpeechRecognition();
+ recognition.lang="sw-KE";
+ recognition.onresult=e=>{result.textContent="You said: "+e.results[0][0].transcript;};
+ recognition.onerror=()=>{result.textContent="Could not recognise speech. Please try again.";};
+ recognition.start();
+};
+
+/* ADMIN PORTAL */
+document.getElementById("openAdminButton").onclick=async()=>{
+ if(!currentAdmin||currentAdmin.role!=="super_admin"||currentAdmin.status!=="active"){
+  alert("Super Admin access required.");
+  return;
+ }
+ document.getElementById("adminIdentity").textContent="Signed in as: "+(currentAdmin.full_name||currentUser.id);
+ document.getElementById("adminRoleBadge").textContent=currentAdmin.role.replaceAll("_"," ").toUpperCase();
+ document.getElementById("superAdminTools").classList.remove("hidden");
+ document.getElementById("regularAdminInfo").classList.add("hidden");
+ openPage("adminPortalPage");
+ await Promise.all([loadPendingPayments(),loadBusinesses(),loadAdminList(),loadAdminActivity()]);
+};
+
+async function writeAdminLog(action,details={}){
+ const {error}=await db.from("admin_activity_logs").insert({
+  admin_user_id:currentUser.id,action,details
+ });
+ if(error)console.warn("Activity log could not be saved:",error.message);
+}
+
+/* PENDING PAYMENTS */
+async function loadPendingPayments(){
+ const box=document.getElementById("pendingPaymentsList");
+ box.innerHTML="<p class='muted'>Loading pending payments...</p>";
+ const {data,error}=await db.rpc("hesabora_pending_payments");
+ if(error){box.textContent="Could not load payments: "+error.message;return;}
+ const rows=Array.isArray(data)?data:[];
+ if(!rows.length){box.innerHTML="<p class='muted'>No pending payments.</p>";return;}
+ box.innerHTML="";
+ rows.forEach(p=>{
+  const card=document.createElement("div");card.className="item";
+  const title=document.createElement("strong");title.textContent=p.business_name||"Business";
+  const details=document.createElement("p");details.className="muted";
+  details.textContent="Amount: "+money(p.amount_kes)+" • M-PESA: "+p.mpesa_code+
+   " • Payer: "+(p.payment_phone||"Not supplied")+" • Submitted: "+formatDate(p.created_at);
+  const note=document.createElement("p");note.className="muted";
+  note.textContent="Verify this transaction in the receiving M-PESA account before approving.";
+  const approve=document.createElement("button");approve.className="smallbtn secondary";approve.textContent="APPROVE";
+  approve.onclick=()=>reviewPayment(p.id,"approve");
+  const reject=document.createElement("button");reject.className="smallbtn danger";reject.textContent="REJECT";
+  reject.onclick=()=>reviewPayment(p.id,"reject");
+  card.append(title,details,note,approve,reject);box.appendChild(card);
+ });
+}
+async function reviewPayment(id,decision){
+ if(!confirm("Have you verified this M-PESA transaction in your receiving account? "+(decision==="approve"?"Approve payment?":"Reject payment?")))return;
+ const {data,error}=await db.rpc("hesabora_review_subscription_payment",{
+  p_payment_id:id,p_decision:decision
+ });
+ if(error){showMsg("paymentReviewMessage",error.message,"error");return;}
+ showMsg("paymentReviewMessage","Payment "+decision+"d successfully.");
+ await loadPendingPayments();
+ await writeAdminLog("subscription_payment_"+decision,{payment_id:id});
+ await loadAdminActivity();
+}
+
+/* BUSINESS MANAGEMENT */
+async function loadBusinesses(){
+ const box=document.getElementById("businessAdminList");
+ box.innerHTML="<p class='muted'>Loading businesses...</p>";
+ const {data,error}=await db.rpc("hesabora_admin_business_list");
+ if(error){box.textContent="Could not load businesses: "+error.message;return;}
+ const rows=Array.isArray(data)?data:[];
+ if(!rows.length){box.innerHTML="<p class='muted'>No businesses found.</p>";return;}
+ box.innerHTML="";
+ rows.forEach(b=>{
+  const card=document.createElement("div");card.className="item";
+  const title=document.createElement("strong");title.textContent=b.business_name||"Unnamed business";
+  const info=document.createElement("p");info.className="muted";
+  info.textContent="Owner: "+(b.owner_name||"Not supplied")+
+   " • Phone: "+(b.owner_phone||b.business_phone||"Not supplied")+
+   " • Joined: "+formatDate(b.joined_at);
+  const sub=document.createElement("p");sub.className="muted";
+  sub.textContent="Subscription: "+(b.subscription_status||"No subscription")+
+   (b.expires_at?" • Expires: "+formatDate(b.expires_at):"");
+  const status=document.createElement("span");status.className="status "+(b.account_status||"");
+  status.textContent=(b.account_status||"unknown").toUpperCase();
+  const actions=document.createElement("div");
+  if(b.account_status!=="closed"){
+   const btn=document.createElement("button");
