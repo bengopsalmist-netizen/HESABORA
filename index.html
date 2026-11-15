@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -13,6 +13,7 @@ html{width:100%;min-height:100%;overflow-x:hidden}
 body{margin:0;width:100%;min-height:100vh;background:#f3f6fb;color:#18243b;font-family:Arial,sans-serif;padding-bottom:85px;overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
 .hidden{display:none!important}
 .screen{display:none!important;min-height:100vh;width:100%}
 .screen.active{display:block!important}
@@ -66,6 +67,12 @@ input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-ra
 .status-active{background:#e1f7e9;color:#176337}
 .status-pending{background:#fff3d6;color:#8a5a00}
 .status-expired,.status-rejected{background:#ffe5e5;color:#a00000}
+.business-card{border:1px solid #edf0f5;border-radius:12px;padding:14px;margin-top:12px;overflow-wrap:anywhere}
+.business-card .business-name{font-weight:bold;font-size:16px;margin-bottom:7px}
+.business-details{font-size:13px;line-height:1.9;color:#627087}
+.business-actions{display:flex;gap:8px;margin-top:12px}
+.business-actions button{flex:1}
+.search-box{margin:13px 0}
 footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 @media(min-width:700px){
  header{padding:25px max(25px,calc((100% - 1160px)/2))}
@@ -87,6 +94,7 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
  .brand{font-size:23px}
  .row{gap:7px}
  .row button{font-size:12px;padding:11px 7px}
+ .business-actions button{font-size:12px;padding:11px 6px}
 }
 @media(max-width:350px){
  .brand{font-size:21px}
@@ -359,6 +367,27 @@ footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
 
 <div id="superAdminTools" class="hidden">
 
+<!-- REGISTERED BUSINESSES -->
+<div class="card">
+<h3>Registered Businesses</h3>
+<p class="muted">View and manage all businesses registered on HESABORA.</p>
+
+<input
+ id="businessSearch"
+ class="search-box"
+ type="search"
+ placeholder="Search business, owner or phone number..."
+>
+
+<button class="secondary" id="refreshBusinessesButton" style="width:100%">REFRESH BUSINESS LIST</button>
+
+<div id="businessList">
+<p class="muted">Loading registered businesses...</p>
+</div>
+
+<div id="businessListMessage" class="message"></div>
+</div>
+
 <div class="card">
 <h3>Pending Subscription Payments</h3>
 <p class="muted">Verify the M-PESA payment before approving a subscription.</p>
@@ -446,6 +475,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null;
 let currentBusiness=null;
 let currentAdmin=null;
+let registeredBusinesses=[];
 
 function showScreen(id){
  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
@@ -573,6 +603,16 @@ async function loadBusiness(){
 
  if(businesses&&businesses.length){
   currentBusiness=businesses[0];
+
+  if(currentBusiness.account_status==="suspended"||currentBusiness.account_status==="closed"){
+   await db.auth.signOut();
+   currentUser=null;
+   currentBusiness=null;
+   showScreen("authScreen");
+   showMsg("loginMessage","This business account is currently suspended. Please contact HESABORA support.","error");
+   return;
+  }
+
   await checkAdminAccess();
   showDashboard(profile);
   await loadMySubscription();
@@ -621,7 +661,7 @@ async function checkAdminAccess(){
  if(!currentUser)return;
 
  const {data,error}=await db.from("platform_admins")
-  .select("user_id,full_name,role,responsibilities,permissions,is_active")
+  .select("user_id,full_name,role,responsibilities,permissions,is_active,status")
   .eq("user_id",currentUser.id).maybeSingle();
 
  if(error){
@@ -758,6 +798,7 @@ document.getElementById("logoutButton").onclick=async()=>{
  currentUser=null;
  currentBusiness=null;
  currentAdmin=null;
+ registeredBusinesses=[];
  showScreen("authScreen");
  document.getElementById("registerBox").classList.remove("hidden");
  document.getElementById("loginBox").classList.add("hidden");
@@ -807,10 +848,154 @@ document.getElementById("openAdminButton").onclick=async()=>{
  await loadAdminActivity();
 
  if(isSuper){
+  await loadRegisteredBusinesses();
   await loadAdminList();
   await loadPendingSubscriptionPayments();
  }
 };
+
+/* REGISTERED BUSINESSES */
+async function loadRegisteredBusinesses(){
+ const box=document.getElementById("businessList");
+ box.innerHTML="<p class='muted'>Loading registered businesses...</p>";
+ hideMsg("businessListMessage");
+
+ if(!currentAdmin||currentAdmin.role!=="super_admin"){
+  box.textContent="Super Admin access required.";
+  return;
+ }
+
+ const {data,error}=await db.rpc("hesabora_admin_business_list");
+
+ if(error){
+  box.textContent="Could not load businesses: "+error.message;
+  return;
+ }
+
+ registeredBusinesses=Array.isArray(data)?data:[];
+ renderRegisteredBusinesses();
+}
+
+function renderRegisteredBusinesses(){
+ const box=document.getElementById("businessList");
+ const search=(document.getElementById("businessSearch").value||"").trim().toLowerCase();
+
+ const filtered=registeredBusinesses.filter(b=>{
+  const values=[
+   b.business_name,
+   b.business_phone,
+   b.owner_name,
+   b.owner_phone,
+   b.business_id
+  ];
+  return values.some(v=>String(v||"").toLowerCase().includes(search));
+ });
+
+ if(!filtered.length){
+  box.innerHTML=registeredBusinesses.length
+   ?"<p class='muted'>No businesses match your search.</p>"
+   :"<p class='muted'>There are no registered businesses yet.</p>";
+  return;
+ }
+
+ box.innerHTML="";
+
+ filtered.forEach(b=>{
+  const card=document.createElement("div");
+  card.className="business-card";
+
+  const name=document.createElement("div");
+  name.className="business-name";
+  name.textContent=b.business_name||"Unnamed business";
+
+  const status=(b.account_status||"unknown").toLowerCase();
+  const statusBadge=document.createElement("span");
+  statusBadge.className="status-pill "+(status==="active"?"status-active":status==="suspended"||status==="closed"?"status-expired":"");
+  statusBadge.textContent=status.toUpperCase();
+
+  const details=document.createElement("div");
+  details.className="business-details";
+
+  const rows=[
+   "Owner: "+(b.owner_name||"Not available"),
+   "Owner phone: "+(b.owner_phone||"Not available"),
+   "Business phone: "+(b.business_phone||"Not available"),
+   "Subscription: "+(b.subscription_status||"Not subscribed"),
+   "Plan: "+(b.plan_name||"—"),
+   "Subscription expiry: "+formatDate(b.expires_at),
+   "Joined: "+formatDate(b.joined_at),
+   "Business ID: "+(b.business_id||"—")
+  ];
+
+  details.textContent=rows.join("\n");
+  details.style.whiteSpace="pre-line";
+
+  card.append(name,statusBadge,details);
+
+  const actions=document.createElement("div");
+  actions.className="business-actions";
+
+  const button=document.createElement("button");
+
+  if(status==="active"){
+   button.className="danger";
+   button.textContent="DEACTIVATE";
+   button.onclick=()=>changeBusinessStatus(b,"suspended",button);
+  }else{
+   button.className="secondary";
+   button.textContent="REACTIVATE";
+   button.onclick=()=>changeBusinessStatus(b,"active",button);
+  }
+
+  actions.appendChild(button);
+  card.appendChild(actions);
+  box.appendChild(card);
+ });
+}
+
+async function changeBusinessStatus(business,newStatus,button){
+ if(!currentAdmin||currentAdmin.role!=="super_admin"){
+  showMsg("businessListMessage","Super Admin access required.","error");
+  return;
+ }
+
+ const businessName=business.business_name||"this business";
+ const action=newStatus==="active"?"reactivate":"deactivate";
+
+ if(!confirm("Are you sure you want to "+action+" "+businessName+"?"))return;
+
+ button.disabled=true;
+ button.textContent="PLEASE WAIT...";
+
+ const {data,error}=await db.rpc("hesabora_set_business_status",{
+  p_business_id:business.business_id,
+  p_new_status:newStatus
+ });
+
+ if(error){
+  showMsg("businessListMessage","Could not update business: "+error.message,"error");
+  button.disabled=false;
+  button.textContent=newStatus==="active"?"REACTIVATE":"DEACTIVATE";
+  return;
+ }
+
+ if(data&&data.success===false){
+  showMsg("businessListMessage","The business status was not updated.","error");
+  button.disabled=false;
+  return;
+ }
+
+ showMsg(
+  "businessListMessage",
+  businessName+" has been "+(newStatus==="active"?"reactivated.":"deactivated.")
+ );
+
+ await loadRegisteredBusinesses();
+ await loadAdminActivity();
+}
+
+document.getElementById("refreshBusinessesButton").onclick=loadRegisteredBusinesses;
+document.getElementById("businessSearch").addEventListener("input",renderRegisteredBusinesses);
 
 /* LOAD PENDING SUBSCRIPTION PAYMENTS */
 async function loadPendingSubscriptionPayments(){
@@ -849,7 +1034,7 @@ async function loadPendingSubscriptionPayments(){
   details.textContent=
    "Amount: KSh "+(payment.amount_kes||300)+
    " | M-PESA code: "+(payment.mpesa_code||"—")+
-   " | Phone: "+(payment.phone_number||"—")+
+   " | Phone: "+(payment.payment_phone||payment.phone_number||"—")+
    " | Submitted: "+(payment.created_at?new Date(payment.created_at).toLocaleString():"—");
 
   card.append(title,details);
@@ -867,12 +1052,12 @@ async function loadPendingSubscriptionPayments(){
   reject.style.marginTop="10px";
   reject.textContent="REJECT";
 
-  approve.onclick=()=>reviewSubscriptionPayment(payment.id,"approve",approve,reject);
-  reject.onclick=()=>reviewSubscriptionPayment(payment.id,"reject",approve,reject);
-
   buttons.append(approve,reject);
   card.appendChild(buttons);
   box.appendChild(card);
+
+  approve.onclick=()=>reviewSubscriptionPayment(payment.id,"approve",approve,reject);
+  reject.onclick=()=>reviewSubscriptionPayment(payment.id,"reject",approve,reject);
  });
 }
 
