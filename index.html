@@ -6,464 +6,451 @@
 <meta name="theme-color" content="#123b80">
 <title>HESABORA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 *{box-sizing:border-box}
-html{width:100%;min-height:100%;overflow-x:hidden}
-body{margin:0;width:100%;min-height:100vh;background:#f3f6fb;color:#18243b;font-family:Arial,sans-serif;padding-bottom:85px;overflow-x:hidden}
+body{margin:0;background:#f3f6fb;color:#18243b;font-family:Arial,sans-serif;padding-bottom:85px}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
 .hidden{display:none!important}
-.screen{display:none!important;min-height:100vh;width:100%}
-.screen.active{display:block!important}
-header{background:linear-gradient(135deg,#102d68,#1976b9);color:white;padding:23px 17px}
-.top{display:flex;justify-content:space-between;align-items:center}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+header{background:linear-gradient(135deg,#102d68,#1976b9);color:white;padding:22px 17px}
 .brand{font-size:25px;font-weight:900;letter-spacing:1px}
 .tagline{font-size:12px;margin-top:5px}
-.headername{font-size:17px;font-weight:bold;margin-top:24px}
-.headerphone{font-size:12px;margin-top:5px;opacity:.85}
-main{width:100%;max-width:1200px;margin:0 auto;padding:17px}
-#appScreen main{max-width:1200px}
-.appPage{width:100%;max-width:100%}
-.card{background:white;border-radius:17px;padding:20px;margin-bottom:16px;box-shadow:0 3px 15px #142d5010;width:100%}
+.headername{font-size:17px;font-weight:bold;margin-top:20px}
+main{max-width:1100px;margin:auto;padding:16px}
+.card{background:white;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 3px 15px #142d5010}
 h2{font-size:21px;margin:0 0 8px}
 h3{margin:0 0 8px;font-size:17px}
 .muted{color:#718096;font-size:13px}
-label{display:block;font-size:13px;font-weight:bold;margin:15px 0 6px}
+label{display:block;font-size:13px;font-weight:bold;margin:14px 0 6px}
 input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-radius:10px;background:white}
-.primary{background:#1769aa;color:white;border:0;padding:14px;border-radius:10px;font-weight:bold;width:100%;margin-top:16px}
-.secondary{background:#eaf1fb;color:#174b87;border:0;padding:12px;border-radius:10px;font-weight:bold}
-.danger{background:#ffe8e8;color:#a22;border:0;padding:12px;border-radius:10px;font-weight:bold}
-.message{padding:12px;border-radius:9px;margin-top:13px;font-size:13px;display:none}
+.primary,.secondary,.danger{border:0;padding:13px;border-radius:10px;font-weight:bold}
+.primary{background:#1769aa;color:white;width:100%;margin-top:14px}
+.secondary{background:#eaf1fb;color:#174b87}
+.danger{background:#ffe8e8;color:#a22}
+.message{padding:12px;border-radius:9px;margin-top:12px;font-size:13px;display:none}
 .error{background:#ffe5e5;color:#a00000}
 .success{background:#e1f7e9;color:#176337}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:15px;width:100%}
-.tile{border-radius:16px;padding:19px 15px;color:white;min-height:125px;border:0;text-align:left;width:100%;min-width:0}
-.tile .icon{font-size:27px}
-.tile strong{display:block;font-size:15px;margin-top:12px}
-.tile small{display:block;margin-top:5px;opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+.tile{border:0;border-radius:15px;padding:17px 12px;color:white;text-align:left;min-height:115px}
+.tile strong{display:block;margin-top:10px}
 .blue{background:linear-gradient(135deg,#1685df,#1761b6)}
 .green{background:linear-gradient(135deg,#24b878,#078653)}
 .orange{background:linear-gradient(135deg,#ffad42,#e87916)}
 .red{background:linear-gradient(135deg,#fa6b6b,#d83c48)}
 .purple{background:linear-gradient(135deg,#a276ed,#7043bc)}
 .teal{background:linear-gradient(135deg,#27b9b4,#087f87)}
-.market{background:linear-gradient(120deg,#143d83,#168cba);color:white;padding:22px;border-radius:17px;margin:17px 0;width:100%}
-.market h2{font-size:20px}
-.market button{width:48%;padding:13px;border:0;border-radius:10px;font-weight:bold;margin-top:13px}
-.market .sell{background:#ffca55;color:#26344b}
-.market .buy{background:white;color:#174b87}
-.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -3px 14px #00000012;z-index:20}
-.nav button{background:none;border:0;color:#52627a;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.nav .mic{background:#1769aa;color:white;width:53px;height:53px;border-radius:50%;font-size:23px;margin-top:-23px}
-.nav span{font-size:20px}
-.page-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
-.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-.row button{flex:1;min-width:0}
-.item{padding:13px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
-.admin-badge{display:inline-block;padding:6px 10px;background:#eaf1fb;color:#174b87;border-radius:20px;font-size:12px;font-weight:bold}
-.status-pill{display:inline-block;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold;background:#eaf1fb;color:#174b87}
-.status-active{background:#e1f7e9;color:#176337}
-.status-pending{background:#fff3d6;color:#8a5a00}
-.status-expired,.status-rejected{background:#ffe5e5;color:#a00000}
-.business-card{border:1px solid #edf0f5;border-radius:12px;padding:14px;margin-top:12px;overflow-wrap:anywhere}
-.business-card .business-name{font-weight:bold;font-size:16px;margin-bottom:7px}
-.business-details{font-size:13px;line-height:1.9;color:#627087}
-.business-actions{display:flex;gap:8px;margin-top:12px}
-.business-actions button{flex:1}
-.search-box{margin:13px 0}
+.appPage{width:100%}
+.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -3px 14px #0001;z-index:20}
+.nav button{background:none;border:0;color:#52627a;font-size:11px}
+.nav span{display:block;font-size:20px}
+.item{padding:12px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
+.business-card{border:1px solid #edf0f5;border-radius:12px;padding:13px;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.row>*{flex:1;min-width:0}
+.market{background:linear-gradient(120deg,#143d83,#168cba);color:white;padding:20px;border-radius:15px;margin:15px 0}
 footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
-@media(min-width:700px){
- header{padding:25px max(25px,calc((100% - 1160px)/2))}
- main{padding:24px}
- .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
- .tile{min-height:145px;padding:22px}
- .card{padding:24px}
-}
-@media(min-width:1050px){
- .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
- #appScreen main{padding:28px}
- .tile strong{font-size:17px}
-}
-@media(max-width:450px){
- main{padding:13px}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .tile{padding:15px 12px;min-height:115px}
- .card{padding:17px}
- .brand{font-size:23px}
- .row{gap:7px}
- .row button{font-size:12px;padding:11px 7px}
- .business-actions button{font-size:12px;padding:11px 6px}
-}
-@media(max-width:350px){
- .brand{font-size:21px}
- .grid{gap:8px}
- .tile{padding:13px}
-}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:12px}.card{padding:16px}}
 </style>
 </head>
-
 <body>
 
 <section id="authScreen" class="screen">
-<header>
-<div class="brand">HESABORA</div>
-<div class="tagline">Your Business, Under Control.</div>
-<p>Manage Your Business. Grow With Confidence.</p>
-</header>
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div><p>Manage Your Business. Grow With Confidence.</p></header>
 <main>
 <div class="card" id="registerBox">
 <h2>Create Your Account</h2>
-<p class="muted">Join HESABORA today.</p>
 <form id="registerForm">
-<label>Full Name</label><input id="fullName" required placeholder="Your full name">
-<label>Phone Number</label><input id="registerPhone" required type="tel" placeholder="0712345678">
-<label>Password</label><input id="registerPassword" required type="password" minlength="8">
-<label>Confirm Password</label><input id="confirmPassword" required type="password" minlength="8">
+<label>Full Name</label><input id="fullName" required>
+<label>Phone Number</label><input id="registerPhone" type="tel" required placeholder="0712345678">
+<label>Password</label><input id="registerPassword" type="password" minlength="8" required>
+<label>Confirm Password</label><input id="confirmPassword" type="password" minlength="8" required>
 <button class="primary" id="registerButton">CREATE ACCOUNT</button>
 </form>
 <div id="registerMessage" class="message"></div>
-<p class="muted" style="text-align:center">Already registered? <a href="#" id="showLogin">Login</a></p>
+<p class="muted">Already registered? <a href="#" id="showLogin">Login</a></p>
 </div>
-
 <div class="card hidden" id="loginBox">
 <h2>Welcome Back!</h2>
-<p class="muted">Login to your HESABORA account.</p>
 <form id="loginForm">
-<label>Phone Number</label><input id="loginPhone" required type="tel" placeholder="0712345678">
-<label>Password</label><input id="loginPassword" required type="password">
+<label>Phone Number</label><input id="loginPhone" required>
+<label>Password</label><input id="loginPassword" type="password" required>
 <button class="primary" id="loginButton">LOGIN</button>
 </form>
 <div id="loginMessage" class="message"></div>
-<p class="muted" style="text-align:center">New to HESABORA? <a href="#" id="showRegister">Create account</a></p>
+<p class="muted">New to HESABORA? <a href="#" id="showRegister">Create account</a></p>
 </div>
 </main>
 </section>
 
 <section id="setupScreen" class="screen">
-<header>
-<div class="brand">HESABORA</div>
-<div class="tagline">Your Business, Under Control.</div>
-</header>
-<main>
-<div class="card">
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></header>
+<main><div class="card">
 <h2>Register Your Business</h2>
-<p class="muted">Let's set up your business account.</p>
 <form id="businessForm">
 <label>Business Name</label><input id="businessName" required>
-<label>Business Phone Number</label><input id="businessPhone" required type="tel">
-<label>Preferred Language</label>
-<select id="businessLanguage"><option>English</option><option>Kiswahili</option></select>
+<label>Business Phone Number</label><input id="businessPhone" required>
+<label>Preferred Language</label><select id="businessLanguage"><option>English</option><option>Kiswahili</option></select>
 <button class="primary" id="businessButton">CREATE BUSINESS</button>
-</form>
-<div id="businessMessage" class="message"></div>
-</div>
-</main>
+</form><div id="businessMessage" class="message"></div>
+</div></main>
 </section>
 
 <section id="appScreen" class="screen">
 <header>
-<div class="top">
-<div>
-<div class="brand">HESABORA</div>
-<div class="tagline">Your Business, Under Control.</div>
-</div>
-<button class="secondary" id="notificationButton">🔔</button>
-</div>
-<div class="headername" id="businessHeading">Welcome Back! 👋</div>
-<div class="headerphone" id="ownerHeading"></div>
+<div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div>
+<div class="headername" id="businessHeading"></div><div id="ownerHeading" class="muted"></div>
 </header>
-
 <main>
 
 <div id="dashboardPage" class="appPage">
-<div class="page-title"><h2>Financial Overview</h2></div>
+<h2>Financial Overview</h2>
 <div class="row">
-<button class="secondary filter">Today</button>
-<button class="secondary filter">Yesterday</button>
-<button class="secondary filter">Weekly</button>
-<button class="secondary filter">Monthly</button>
+<button class="secondary filter" data-period="today">Today</button>
+<button class="secondary filter" data-period="yesterday">Yesterday</button>
+<button class="secondary filter" data-period="week">Weekly</button>
+<button class="secondary filter" data-period="month">Monthly</button>
 </div>
 <div class="grid">
-<button class="tile blue" onclick="openPage('recordPage')"><div class="icon">🧾</div><strong>Record</strong><small>Record a sale</small></button>
-<button class="tile green" onclick="openPage('salesPage')"><div class="icon">📈</div><strong>Today's Sales</strong><small>Cash and M-Pesa</small></button>
-<button class="tile orange" onclick="openPage('debtsPage')"><div class="icon">👥</div><strong>Debts</strong><small>Customer receivables</small></button>
-<button class="tile red" onclick="openPage('stockPage')"><div class="icon">📦</div><strong>Stock</strong><small>Products and inventory</small></button>
-<button class="tile purple" onclick="openPage('expensesPage')"><div class="icon">💸</div><strong>Expenses</strong><small>Business spending</small></button>
-<button class="tile teal" onclick="openPage('profitPage')"><div class="icon">💰</div><strong>Profit</strong><small>Business performance</small></button>
-</div>
-<div class="market">
-<h2>🛍️ HESABORA MARKET</h2>
-<p>Discover products or sell your products to customers.</p>
-<button class="sell" onclick="openPage('marketPage')">SELL</button>
-<button class="buy" onclick="openPage('marketPage')">BUY</button>
+<button class="tile blue" onclick="openPage('recordPage')">🧾<strong>Record Sale</strong></button>
+<button class="tile green" onclick="openPage('salesPage')">📈<strong>Sales</strong></button>
+<button class="tile orange" onclick="openPage('debtsPage')">👥<strong>Debts</strong></button>
+<button class="tile red" onclick="openPage('stockPage')">📦<strong>Stock</strong></button>
+<button class="tile purple" onclick="openPage('expensesPage')">💸<strong>Expenses</strong></button>
+<button class="tile teal" onclick="openPage('profitPage')">💰<strong>Profit</strong></button>
 </div>
 <div class="card">
+<h3 id="periodTitle">Today's Summary</h3>
+<div class="item">Sales: <strong id="dashSales">KSh 0</strong></div>
+<div class="item">Expenses: <strong id="dashExpenses">KSh 0</strong></div>
+<div class="item">Outstanding debts: <strong id="dashDebts">KSh 0</strong></div>
+<div class="item">Net recorded balance: <strong id="dashBalance">KSh 0</strong></div>
+</div>
+<div class="market"><h2>🛍️ HESABORA MARKET</h2><p>Discover products or sell your products.</p><button class="secondary" onclick="openPage('marketPage')">OPEN MARKET</button></div>
+<div class="card">
 <h3>Business Tools</h3>
-<div class="row">
-<button class="secondary" onclick="openPage('customersPage')">👥 Customers</button>
-<button class="secondary" onclick="openPage('suppliersPage')">🏪 Suppliers</button>
-</div>
-<div class="row">
-<button class="secondary" onclick="openPage('reportsPage')">📊 Reports</button>
-<button class="secondary" onclick="openPage('settingsPage')">⚙️ Settings</button>
-</div>
+<div class="row"><button class="secondary" onclick="openPage('customersPage')">Customers</button><button class="secondary" onclick="openPage('suppliersPage')">Suppliers</button></div>
+<div class="row"><button class="secondary" onclick="openPage('reportsPage')">Reports</button><button class="secondary" onclick="openPage('settingsPage')">Settings</button></div>
 </div>
 </div>
 
 <div id="recordPage" class="appPage hidden">
-<div class="page-title"><h2>Record a Sale</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<form id="saleForm">
-<label>Product Name (optional)</label><input id="saleProduct">
-<label>Mode of Payment</label>
-<select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
-<label>Amount (KSh)</label><input id="saleAmount" type="number" min="0.01" step="0.01" required>
+<div class="row"><h2>Record a Sale</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="saleForm">
+<label>Product</label><select id="saleProduct"><option value="">Select product (optional)</option></select>
+<label>Product name if not in stock</label><input id="saleProductName">
+<label>Quantity</label><input id="saleQuantity" type="number" min="1" value="1" required>
+<label>Customer name (optional)</label><input id="saleCustomer">
+<label>Amount (KSh)</label><input id="saleAmount" type="number" min="0.01" step=".01" required>
+<label>Payment</label><select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option><option value="credit">Credit / Debt</option></select>
 <button class="primary">SAVE SALE</button>
-</form>
-<div id="saleMessage" class="message"></div>
-</div>
+</form><div id="saleMessage" class="message"></div></div>
 </div>
 
 <div id="salesPage" class="appPage hidden">
-<div class="page-title"><h2>Sales Summary</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<div class="item">Cash Sales: <strong id="cashSales">KSh 0</strong></div>
-<div class="item">M-Pesa Sales: <strong id="mpesaSales">KSh 0</strong></div>
-<div class="item">Total Sales: <strong id="totalSales">KSh 0</strong></div>
-</div>
+<div class="row"><h2>Sales Summary</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><div id="salesList"></div></div>
 </div>
 
 <div id="debtsPage" class="appPage hidden">
-<div class="page-title"><h2>Customer Debts</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
+<div class="row"><h2>Customer Debts</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
 <div class="card">
 <form id="debtForm">
 <label>Customer Name</label><input id="debtCustomer" required>
 <label>Product Taken</label><input id="debtProduct" required>
-<label>Amount Owed (KSh)</label><input id="debtAmount" type="number" min="0.01" step="0.01" required>
+<label>Amount Owed (KSh)</label><input id="debtAmount" type="number" min=".01" step=".01" required>
 <button class="primary">SAVE DEBT</button>
-</form>
-<div id="debtMessage" class="message"></div>
+</form><div id="debtMessage" class="message"></div>
+<hr><div id="debtsList"></div>
 </div>
 </div>
 
 <div id="stockPage" class="appPage hidden">
-<div class="page-title"><h2>Stock Management</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card"><h3>Inventory</h3><p class="muted">Track products, quantities and purchase costs.</p><p>Stock management will be connected to live inventory in the next database integration step.</p></div>
+<div class="row"><h2>Stock Management</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card">
+<form id="productForm">
+<label>Product Name</label><input id="productName" required>
+<label>Category</label><input id="productCategory">
+<label>Quantity</label><input id="productQuantity" type="number" min="0" required>
+<label>Buying Price per Unit</label><input id="productBuying" type="number" min="0" step=".01" required>
+<label>Selling Price per Unit</label><input id="productSelling" type="number" min="0" step=".01" required>
+<label>Low Stock Alert Level</label><input id="productLow" type="number" min="0" value="5">
+<button class="primary">SAVE PRODUCT</button>
+</form><div id="productMessage" class="message"></div><hr><div id="stockList"></div>
+</div>
 </div>
 
 <div id="expensesPage" class="appPage hidden">
-<div class="page-title"><h2>Expenses</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<form id="expenseForm">
+<div class="row"><h2>Expenses</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="expenseForm">
 <label>Expense Type</label><input id="expenseType" required>
-<label>Amount (KSh)</label><input id="expenseAmount" type="number" min="0.01" step="0.01" required>
+<label>Amount (KSh)</label><input id="expenseAmount" type="number" min=".01" step=".01" required>
+<label>Payment Method</label><select id="expenseMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
 <button class="primary">SAVE EXPENSE</button>
-</form>
-<div id="expenseMessage" class="message"></div>
-</div>
+</form><div id="expenseMessage" class="message"></div><div id="expenseList"></div></div>
 </div>
 
 <div id="profitPage" class="appPage hidden">
-<div class="page-title"><h2>Profit Overview</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<h3>Business Profit</h3>
-<p class="muted">Gross Profit = Sales − Cost of Goods Sold</p>
-<p class="muted">Net Profit = Gross Profit − Expenses</p>
-<p>Profit calculations will be enabled after stock costs and transactions are connected.</p>
+<div class="row"><h2>Profit Overview</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><div class="item">Recorded sales: <strong id="profitSales">0</strong></div><div class="item">Expenses: <strong id="profitExpenses">0</strong></div><div class="item">Stock purchases: <strong id="profitPurchases">0</strong></div><div class="item">Net before cost of goods sold: <strong id="profitNet">0</strong></div><p class="muted">This is a cash/transaction summary, not audited net profit. Cost of goods sold requires reliable purchase-cost history.</p></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b80">
+<title>HESABORA</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f6fb;color:#18243b;font-family:Arial,sans-serif;padding-bottom:85px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+header{background:linear-gradient(135deg,#102d68,#1976b9);color:white;padding:22px 17px}
+.brand{font-size:25px;font-weight:900;letter-spacing:1px}
+.tagline{font-size:12px;margin-top:5px}
+.headername{font-size:17px;font-weight:bold;margin-top:20px}
+main{max-width:1100px;margin:auto;padding:16px}
+.card{background:white;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 3px 15px #142d5010}
+h2{font-size:21px;margin:0 0 8px}
+h3{margin:0 0 8px;font-size:17px}
+.muted{color:#718096;font-size:13px}
+label{display:block;font-size:13px;font-weight:bold;margin:14px 0 6px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #d7dfeb;border-radius:10px;background:white}
+.primary,.secondary,.danger{border:0;padding:13px;border-radius:10px;font-weight:bold}
+.primary{background:#1769aa;color:white;width:100%;margin-top:14px}
+.secondary{background:#eaf1fb;color:#174b87}
+.danger{background:#ffe8e8;color:#a22}
+.message{padding:12px;border-radius:9px;margin-top:12px;font-size:13px;display:none}
+.error{background:#ffe5e5;color:#a00000}
+.success{background:#e1f7e9;color:#176337}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+.tile{border:0;border-radius:15px;padding:17px 12px;color:white;text-align:left;min-height:115px}
+.tile strong{display:block;margin-top:10px}
+.blue{background:linear-gradient(135deg,#1685df,#1761b6)}
+.green{background:linear-gradient(135deg,#24b878,#078653)}
+.orange{background:linear-gradient(135deg,#ffad42,#e87916)}
+.red{background:linear-gradient(135deg,#fa6b6b,#d83c48)}
+.purple{background:linear-gradient(135deg,#a276ed,#7043bc)}
+.teal{background:linear-gradient(135deg,#27b9b4,#087f87)}
+.appPage{width:100%}
+.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -3px 14px #0001;z-index:20}
+.nav button{background:none;border:0;color:#52627a;font-size:11px}
+.nav span{display:block;font-size:20px}
+.item{padding:12px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
+.business-card{border:1px solid #edf0f5;border-radius:12px;padding:13px;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.row>*{flex:1;min-width:0}
+.market{background:linear-gradient(120deg,#143d83,#168cba);color:white;padding:20px;border-radius:15px;margin:15px 0}
+footer{text-align:center;color:#8792a3;padding:20px;font-size:11px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:12px}.card{padding:16px}}
+</style>
+</head>
+<body>
+
+<section id="authScreen" class="screen">
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div><p>Manage Your Business. Grow With Confidence.</p></header>
+<main>
+<div class="card" id="registerBox">
+<h2>Create Your Account</h2>
+<form id="registerForm">
+<label>Full Name</label><input id="fullName" required>
+<label>Phone Number</label><input id="registerPhone" type="tel" required placeholder="0712345678">
+<label>Password</label><input id="registerPassword" type="password" minlength="8" required>
+<label>Confirm Password</label><input id="confirmPassword" type="password" minlength="8" required>
+<button class="primary" id="registerButton">CREATE ACCOUNT</button>
+</form>
+<div id="registerMessage" class="message"></div>
+<p class="muted">Already registered? <a href="#" id="showLogin">Login</a></p>
 </div>
+<div class="card hidden" id="loginBox">
+<h2>Welcome Back!</h2>
+<form id="loginForm">
+<label>Phone Number</label><input id="loginPhone" required>
+<label>Password</label><input id="loginPassword" type="password" required>
+<button class="primary" id="loginButton">LOGIN</button>
+</form>
+<div id="loginMessage" class="message"></div>
+<p class="muted">New to HESABORA? <a href="#" id="showRegister">Create account</a></p>
+</div>
+</main>
+</section>
+
+<section id="setupScreen" class="screen">
+<header><div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div></header>
+<main><div class="card">
+<h2>Register Your Business</h2>
+<form id="businessForm">
+<label>Business Name</label><input id="businessName" required>
+<label>Business Phone Number</label><input id="businessPhone" required>
+<label>Preferred Language</label><select id="businessLanguage"><option>English</option><option>Kiswahili</option></select>
+<button class="primary" id="businessButton">CREATE BUSINESS</button>
+</form><div id="businessMessage" class="message"></div>
+</div></main>
+</section>
+
+<section id="appScreen" class="screen">
+<header>
+<div class="brand">HESABORA</div><div class="tagline">Your Business, Under Control.</div>
+<div class="headername" id="businessHeading"></div><div id="ownerHeading" class="muted"></div>
+</header>
+<main>
+
+<div id="dashboardPage" class="appPage">
+<h2>Financial Overview</h2>
+<div class="row">
+<button class="secondary filter" data-period="today">Today</button>
+<button class="secondary filter" data-period="yesterday">Yesterday</button>
+<button class="secondary filter" data-period="week">Weekly</button>
+<button class="secondary filter" data-period="month">Monthly</button>
+</div>
+<div class="grid">
+<button class="tile blue" onclick="openPage('recordPage')">🧾<strong>Record Sale</strong></button>
+<button class="tile green" onclick="openPage('salesPage')">📈<strong>Sales</strong></button>
+<button class="tile orange" onclick="openPage('debtsPage')">👥<strong>Debts</strong></button>
+<button class="tile red" onclick="openPage('stockPage')">📦<strong>Stock</strong></button>
+<button class="tile purple" onclick="openPage('expensesPage')">💸<strong>Expenses</strong></button>
+<button class="tile teal" onclick="openPage('profitPage')">💰<strong>Profit</strong></button>
+</div>
+<div class="card">
+<h3 id="periodTitle">Today's Summary</h3>
+<div class="item">Sales: <strong id="dashSales">KSh 0</strong></div>
+<div class="item">Expenses: <strong id="dashExpenses">KSh 0</strong></div>
+<div class="item">Outstanding debts: <strong id="dashDebts">KSh 0</strong></div>
+<div class="item">Net recorded balance: <strong id="dashBalance">KSh 0</strong></div>
+</div>
+<div class="market"><h2>🛍️ HESABORA MARKET</h2><p>Discover products or sell your products.</p><button class="secondary" onclick="openPage('marketPage')">OPEN MARKET</button></div>
+<div class="card">
+<h3>Business Tools</h3>
+<div class="row"><button class="secondary" onclick="openPage('customersPage')">Customers</button><button class="secondary" onclick="openPage('suppliersPage')">Suppliers</button></div>
+<div class="row"><button class="secondary" onclick="openPage('reportsPage')">Reports</button><button class="secondary" onclick="openPage('settingsPage')">Settings</button></div>
+</div>
+</div>
+
+<div id="recordPage" class="appPage hidden">
+<div class="row"><h2>Record a Sale</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="saleForm">
+<label>Product</label><select id="saleProduct"><option value="">Select product (optional)</option></select>
+<label>Product name if not in stock</label><input id="saleProductName">
+<label>Quantity</label><input id="saleQuantity" type="number" min="1" value="1" required>
+<label>Customer name (optional)</label><input id="saleCustomer">
+<label>Amount (KSh)</label><input id="saleAmount" type="number" min="0.01" step=".01" required>
+<label>Payment</label><select id="saleMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option><option value="credit">Credit / Debt</option></select>
+<button class="primary">SAVE SALE</button>
+</form><div id="saleMessage" class="message"></div></div>
+</div>
+
+<div id="salesPage" class="appPage hidden">
+<div class="row"><h2>Sales Summary</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><div id="salesList"></div></div>
+</div>
+
+<div id="debtsPage" class="appPage hidden">
+<div class="row"><h2>Customer Debts</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card">
+<form id="debtForm">
+<label>Customer Name</label><input id="debtCustomer" required>
+<label>Product Taken</label><input id="debtProduct" required>
+<label>Amount Owed (KSh)</label><input id="debtAmount" type="number" min=".01" step=".01" required>
+<button class="primary">SAVE DEBT</button>
+</form><div id="debtMessage" class="message"></div>
+<hr><div id="debtsList"></div>
+</div>
+</div>
+
+<div id="stockPage" class="appPage hidden">
+<div class="row"><h2>Stock Management</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card">
+<form id="productForm">
+<label>Product Name</label><input id="productName" required>
+<label>Category</label><input id="productCategory">
+<label>Quantity</label><input id="productQuantity" type="number" min="0" required>
+<label>Buying Price per Unit</label><input id="productBuying" type="number" min="0" step=".01" required>
+<label>Selling Price per Unit</label><input id="productSelling" type="number" min="0" step=".01" required>
+<label>Low Stock Alert Level</label><input id="productLow" type="number" min="0" value="5">
+<button class="primary">SAVE PRODUCT</button>
+</form><div id="productMessage" class="message"></div><hr><div id="stockList"></div>
+</div>
+</div>
+
+<div id="expensesPage" class="appPage hidden">
+<div class="row"><h2>Expenses</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="expenseForm">
+<label>Expense Type</label><input id="expenseType" required>
+<label>Amount (KSh)</label><input id="expenseAmount" type="number" min=".01" step=".01" required>
+<label>Payment Method</label><select id="expenseMethod"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select>
+<button class="primary">SAVE EXPENSE</button>
+</form><div id="expenseMessage" class="message"></div><div id="expenseList"></div></div>
+</div>
+
+<div id="profitPage" class="appPage hidden">
+<div class="row"><h2>Profit Overview</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><div class="item">Recorded sales: <strong id="profitSales">0</strong></div><div class="item">Expenses: <strong id="profitExpenses">0</strong></div><div class="item">Stock purchases: <strong id="profitPurchases">0</strong></div><div class="item">Net before cost of goods sold: <strong id="profitNet">0</strong></div><p class="muted">This is a cash/transaction summary, not audited net profit. Cost of goods sold requires reliable purchase-cost history.</p></div>
 </div>
 
 <div id="customersPage" class="appPage hidden">
-<div class="page-title"><h2>Customers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card"><p>Customer records and purchase history.</p><p class="muted">Customer database integration is coming next.</p></div>
+<div class="row"><h2>Customers</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="customerForm"><label>Full Name</label><input id="customerName" required><label>Phone</label><input id="customerPhone"><label>Location</label><input id="customerLocation"><label>Notes</label><textarea id="customerNotes"></textarea><button class="primary">SAVE CUSTOMER</button></form><div id="customerMessage" class="message"></div><div id="customerList"></div></div>
 </div>
 
 <div id="suppliersPage" class="appPage hidden">
-<div class="page-title"><h2>Suppliers</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card"><p>Manage suppliers and purchase records.</p><p class="muted">Supplier database integration is coming next.</p></div>
+<div class="row"><h2>Suppliers</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="supplierForm"><label>Supplier Name</label><input id="supplierName" required><label>Phone</label><input id="supplierPhone"><label>Location</label><input id="supplierLocation"><label>Notes</label><textarea id="supplierNotes"></textarea><button class="primary">SAVE SUPPLIER</button></form><div id="supplierMessage" class="message"></div><div id="supplierList"></div></div>
 </div>
 
 <div id="marketPage" class="appPage hidden">
-<div class="page-title"><h2>HESABORA MARKET</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card">
-<h2>Welcome to HESABORA MARKET</h2>
-<p class="muted">Buy and sell products.</p>
-<button class="primary" onclick="openPage('sellPage')">🛒 SELL PRODUCTS</button>
-<button class="primary" onclick="openPage('buyPage')">🔎 BUY PRODUCTS</button>
+<div class="row"><h2>HESABORA MARKET</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><button class="primary" onclick="openPage('sellPage')">SELL A PRODUCT</button><label>Search products</label><input id="marketSearch" placeholder="Search product or seller"><div id="marketListings"></div></div>
 </div>
-</div>
-
 <div id="sellPage" class="appPage hidden">
-<div class="page-title"><h2>Sell Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div>
-<div class="card"><p>Seller registration and paid listing packages will be connected in the Market development stage.</p></div>
-</div>
-
-<div id="buyPage" class="appPage hidden">
-<div class="page-title"><h2>Buy Products</h2><button class="secondary" onclick="openPage('marketPage')">← Back</button></div>
-<div class="card"><p>Product browsing and seller contact will be connected in the Market development stage.</p></div>
+<div class="row"><h2>Sell Product</h2><button class="secondary" onclick="openPage('marketPage')">Back</button></div>
+<div class="card"><form id="listingForm"><label>Product Name</label><input id="listingName" required><label>Description</label><textarea id="listingDescription"></textarea><label>Price (KSh)</label><input id="listingPrice" type="number" min=".01" step=".01" required><label>Quantity</label><input id="listingQuantity" type="number" min="1" value="1" required><label>Contact Phone</label><input id="listingPhone" required><button class="primary">PUBLISH LISTING</button></form><div id="listingMessage" class="message"></div></div>
 </div>
 
 <div id="reportsPage" class="appPage hidden">
-<div class="page-title"><h2>Reports</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card"><p>Daily, weekly and monthly business reports will be connected to live records.</p></div>
+<div class="row"><h2>Reports</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><label>Report period</label><select id="reportPeriod"><option value="today">Today</option><option value="week">This week</option><option value="month">This month</option><option value="all">All records</option></select><button class="primary" id="generateReport">GENERATE REPORT</button><div id="reportOutput"></div></div>
 </div>
 
-<!-- SETTINGS AND SUBSCRIPTION -->
 <div id="settingsPage" class="appPage hidden">
-<div class="page-title"><h2>Settings</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-
-<div class="card">
-<h3>Business Settings</h3>
-<p id="settingsBusiness"></p>
-<p id="settingsPhone"></p>
+<div class="row"><h2>Settings</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><h3>Business Settings</h3><p id="settingsBusiness"></p><p id="settingsPhone"></p></div>
+<div class="card"><h3>HESABORA Subscription</h3><p>KSh 300 / 30 days</p><p>M-PESA: 0114772821</p><p>Status: <strong id="subscriptionStatus">Checking...</strong></p><p>Expiry: <strong id="subscriptionExpiry">—</strong></p>
+<button class="secondary" id="refreshSubscriptionButton">REFRESH SUBSCRIPTION</button><div id="subscriptionRefreshMessage" class="message"></div>
+<form id="subscriptionPaymentForm"><label>M-PESA Transaction Code</label><input id="subscriptionMpesaCode" required maxlength="30"><label>Phone used to pay</label><input id="subscriptionPhone" required><button class="primary" id="subscriptionSubmitButton">SUBMIT PAYMENT</button></form><div id="subscriptionPaymentMessage" class="message"></div>
+</div>
+<div class="card"><div id="adminAccessArea" class="hidden"><h3>System Administration</h3><button class="primary" id="openAdminButton">OPEN ADMIN PORTAL</button></div><button class="danger" id="logoutButton" style="width:100%;margin-top:15px">LOG OUT</button></div>
 </div>
 
-<div class="card">
-<h3>HESABORA Subscription</h3>
-<p class="muted">Access HESABORA for KSh 300 every 30 days.</p>
-<div class="item">Plan: <strong>HESABORA Business</strong></div>
-<div class="item">Price: <strong>KSh 300 / 30 days</strong></div>
-<div class="item">M-PESA Number: <strong>0114772821</strong></div>
-<div class="item">Subscription status: <strong id="subscriptionStatus">Checking...</strong></div>
-<div class="item">Expiry date: <strong id="subscriptionExpiry">—</strong></div>
-<button class="secondary" id="refreshSubscriptionButton" style="width:100%;margin-top:12px">REFRESH SUBSCRIPTION</button>
-<div id="subscriptionRefreshMessage" class="message"></div>
-
-<hr style="border:0;border-top:1px solid #edf0f5;margin:20px 0">
-
-<h3>Submit M-PESA Payment</h3>
-<p class="muted">Pay KSh 300 to the number above, then enter your M-PESA transaction code below. Your subscription is activated only after verification.</p>
-<form id="subscriptionPaymentForm">
-<label>M-PESA Transaction Code</label>
-<input id="subscriptionMpesaCode" required maxlength="30" placeholder="e.g. QAB12CDE34">
-<label>Phone Number Used to Pay</label>
-<input id="subscriptionPhone" required type="tel" placeholder="0712345678">
-<button class="primary" id="subscriptionSubmitButton">SUBMIT PAYMENT FOR VERIFICATION</button>
-</form>
-<div id="subscriptionPaymentMessage" class="message"></div>
-</div>
-
-<div class="card">
-<div id="adminAccessArea" class="hidden">
-<h3>System Administration</h3>
-<p class="muted">Separate portal for authorised administrators.</p>
-<button class="primary" id="openAdminButton">🔐 OPEN ADMIN PORTAL</button>
-</div>
-<button class="danger" id="logoutButton" style="width:100%;margin-top:20px">LOG OUT</button>
-</div>
-</div>
-
-<!-- ADMIN PORTAL -->
 <div id="adminPortalPage" class="appPage hidden">
-<div class="page-title"><h2>Admin Portal</h2><button class="secondary" onclick="openPage('settingsPage')">← Back</button></div>
-<div class="card">
-<h3>HESABORA Administration</h3>
-<p class="muted">Separate system administration portal.</p>
-<p id="adminIdentity"></p>
-<span class="admin-badge" id="adminRoleBadge">ADMIN</span>
-</div>
-
+<div class="row"><h2>Admin Portal</h2><button class="secondary" onclick="openPage('settingsPage')">Back</button></div>
+<div class="card"><p id="adminIdentity"></p><span id="adminRoleBadge"></span></div>
 <div id="superAdminTools" class="hidden">
-
-<!-- REGISTERED BUSINESSES -->
-<div class="card">
-<h3>Registered Businesses</h3>
-<p class="muted">View and manage all businesses registered on HESABORA.</p>
-
-<input
- id="businessSearch"
- class="search-box"
- type="search"
- placeholder="Search business, owner or phone number..."
->
-
-<button class="secondary" id="refreshBusinessesButton" style="width:100%">REFRESH BUSINESS LIST</button>
-
-<div id="businessList">
-<p class="muted">Loading registered businesses...</p>
+<div class="card"><h3>Registered Businesses</h3><button class="secondary" id="refreshBusinessesButton">REFRESH</button><div id="businessList"></div></div>
+<div class="card"><h3>Pending Subscription Payments</h3><button class="secondary" id="refreshPaymentsButton">REFRESH</button><div id="pendingPaymentsList"></div></div>
+<div class="card"><h3>Add Existing Admin</h3><form id="addAdminForm"><label>User UUID</label><input id="newAdminUserId" required><label>Full Name</label><input id="newAdminName" required><label>Role</label><select id="newAdminRole"><option value="finance_admin">Finance Admin</option><option value="support_admin">Customer Support Admin</option><option value="verification_admin">Business Verification Admin</option><option value="market_admin">Market Admin</option><option value="marketing_admin">Marketing Admin</option><option value="technical_admin">Technical Admin</option><option value="operations_admin">Operations Admin</option></select><button class="primary">ADD ADMIN</button></form><div id="addAdminMessage" class="message"></div></div>
+<div class="card"><h3>Registered Admins</h3><button class="secondary" id="refreshAdminsButton">REFRESH</button><div id="adminList"></div><div id="adminListMessage" class="message"></div></div>
 </div>
-
-<div id="businessListMessage" class="message"></div>
-</div>
-
-<div class="card">
-<h3>Pending Subscription Payments</h3>
-<p class="muted">Verify the M-PESA payment before approving a subscription.</p>
-<button class="secondary" id="refreshPaymentsButton" style="width:100%">REFRESH PENDING PAYMENTS</button>
-<div id="pendingPaymentsList"><p class="muted">Loading pending payments...</p></div>
-<div id="pendingPaymentsMessage" class="message"></div>
-</div>
-
-<div class="card">
-<h3>Add Existing HESABORA Admin</h3>
-<p class="muted">The person must already have a HESABORA account. Enter their Supabase User ID.</p>
-<form id="addAdminForm">
-<label>User ID (UUID)</label><input id="newAdminUserId" required placeholder="Paste user's Supabase User ID">
-<label>Full Name</label><input id="newAdminName" required>
-<label>Role</label>
-<select id="newAdminRole">
-<option value="finance_admin">Finance Admin</option>
-<option value="support_admin">Customer Support Admin</option>
-<option value="verification_admin">Business Verification Admin</option>
-<option value="market_admin">Market Admin</option>
-</select>
-<label>Responsibilities</label>
-<select id="newAdminResponsibilities" multiple size="5">
-<option value="payment_approval">Payment Approval</option>
-<option value="customer_support">Customer Support</option>
-<option value="business_verification">Business Verification</option>
-<option value="market_management">Market Management</option>
-<option value="reports">Reports</option>
-</select>
-<button class="primary" type="submit">ADD ADMIN</button>
-</form>
-<div id="addAdminMessage" class="message"></div>
-</div>
-
-<div class="card">
-<h3>Registered Admins</h3>
-<button class="secondary" id="refreshAdminsButton" style="width:100%">REFRESH ADMIN LIST</button>
-<div id="adminList"><p class="muted">Load admin list to view records.</p></div>
-<div id="adminListMessage" class="message"></div>
-</div>
-</div>
-
-<div id="regularAdminInfo" class="card hidden">
-<h3>Your Admin Access</h3>
-<p class="muted">Your permissions are assigned by the HESABORA Super Admin.</p>
-<div id="myResponsibilities"></div>
-</div>
-
-<div class="card">
-<h3>Admin Activity</h3>
-<div id="adminActivityList"><p class="muted">Activity history will appear here when available.</p></div>
-</div>
+<div class="card"><h3>Your Admin Access</h3><div id="myResponsibilities"></div></div>
+<div class="card"><h3>Admin Activity</h3><div id="adminActivityList"></div></div>
 </div>
 
 <div id="voicePage" class="appPage hidden">
-<div class="page-title"><h2>Voice Assistant</h2><button class="secondary" onclick="openPage('dashboardPage')">← Back</button></div>
-<div class="card" style="text-align:center">
-<div style="font-size:55px">🎙️</div>
-<h3>HESABORA Voice Assistant</h3>
-<p class="muted">Speak in English or Kiswahili to record business activities.</p>
-<button class="primary" id="voiceButton">START SPEAKING</button>
-<p id="voiceResult"></p>
-<p class="muted">Voice recognition currently displays speech only; it does not save transactions.</p>
+<div class="row"><h2>Voice Assistant</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><h3>🎙️ HESABORA Voice</h3><p class="muted">Speak a sale or expense description. Review it before saving.</p><button class="primary" id="voiceButton">START SPEAKING</button><p id="voiceResult"></p><button class="secondary" id="voiceToSale">USE AS SALE DESCRIPTION</button></div>
 </div>
-</div>
-
 </main>
-
 <nav class="nav">
-<button onclick="openPage('dashboardPage')"><span>🏠</span>Dashboard</button>
+<button onclick="openPage('dashboardPage')"><span>🏠</span>Home</button>
 <button onclick="openPage('customersPage')"><span>👥</span>Customers</button>
-<button class="mic" onclick="openPage('voicePage')">🎙️</button>
-<button onclick="openPage('suppliersPage')"><span>🏪</span>Suppliers</button>
+<button onclick="openPage('voicePage')"><span>🎙️</span>Voice</button>
+<button onclick="openPage('stockPage')"><span>📦</span>Stock</button>
 <button onclick="openPage('settingsPage')"><span>⚙️</span>Settings</button>
 </nav>
-
 <footer>HESABORA © 2026 • Your Business, Your Future.</footer>
 </section>
 
@@ -472,813 +459,246 @@ const SUPABASE_URL="https://ivdvfacwjygnrnnstbji.supabase.co";
 const SUPABASE_KEY="sb_publishable_GXaoW9fbDamZKxsWFEEQvw_bS71EhYU";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser=null;
-let currentBusiness=null;
-let currentAdmin=null;
-let registeredBusinesses=[];
+let currentUser=null,currentBusiness=null,currentAdmin=null;
+let transactions=[],products=[],period="today";
 
-function showScreen(id){
- document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
- const screen=document.getElementById(id);
- if(screen)screen.classList.add("active");
- window.scrollTo(0,0);
-}
-
-function openPage(id){
- document.querySelectorAll(".appPage").forEach(page=>page.classList.add("hidden"));
- const target=document.getElementById(id);
- if(target)target.classList.remove("hidden");
- window.scrollTo(0,0);
-}
-
-function normalizePhone(v){
- let p=v.replace(/[\s\-()]/g,"");
- if(/^0[17]\d{8}$/.test(p))p="+254"+p.substring(1);
- else if(/^254[17]\d{8}$/.test(p))p="+"+p;
- else if(/^[17]\d{8}$/.test(p))p="+254"+p;
- if(!/^\+254[17]\d{8}$/.test(p))throw Error("Enter a valid Kenyan number, e.g. 0712345678.");
- return p;
-}
-
-function internalEmail(phone){
- return phone.replace("+","")+"@login.hesabora.app";
-}
-
-function showMsg(id,msg,type="success"){
- const e=document.getElementById(id);
- if(!e)return;
- e.textContent=msg;
- e.className="message "+type;
- e.style.display="block";
-}
-
-function hideMsg(id){
- const e=document.getElementById(id);
- if(e)e.style.display="none";
-}
-
-/* AUTH SWITCH */
-document.getElementById("showLogin").onclick=e=>{
- e.preventDefault();
- document.getElementById("registerBox").classList.add("hidden");
- document.getElementById("loginBox").classList.remove("hidden");
-};
-
-document.getElementById("showRegister").onclick=e=>{
- e.preventDefault();
- document.getElementById("loginBox").classList.add("hidden");
- document.getElementById("registerBox").classList.remove("hidden");
-};
-
-/* REGISTRATION */
-document.getElementById("registerForm").onsubmit=async e=>{
- e.preventDefault();
- const b=document.getElementById("registerButton");
- b.disabled=true;
- b.textContent="Creating account...";
- try{
-  const name=document.getElementById("fullName").value.trim();
-  const phone=normalizePhone(document.getElementById("registerPhone").value);
-  const pass=document.getElementById("registerPassword").value;
-  if(pass.length<8)throw Error("Password must have at least 8 characters.");
-  if(pass!==document.getElementById("confirmPassword").value)throw Error("Passwords do not match.");
-
-  const {data,error}=await db.auth.signUp({
-   email:internalEmail(phone),
-   password:pass,
-   options:{data:{full_name:name,phone:phone}}
-  });
-  if(error)throw error;
-  if(!data.session)throw Error("Registration needs an active session. Check Supabase email confirmation settings.");
-
-  currentUser=data.user;
-  await loadBusiness();
- }catch(err){
-  showMsg("registerMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="CREATE ACCOUNT";
- }
-};
-
-/* LOGIN */
-document.getElementById("loginForm").onsubmit=async e=>{
- e.preventDefault();
- const b=document.getElementById("loginButton");
- b.disabled=true;
- b.textContent="Logging in...";
- try{
-  const phone=normalizePhone(document.getElementById("loginPhone").value);
-  const pass=document.getElementById("loginPassword").value;
-  const {data,error}=await db.auth.signInWithPassword({email:internalEmail(phone),password:pass});
-  if(error)throw error;
-  currentUser=data.user;
-  await loadBusiness();
- }catch(err){
-  showMsg("loginMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="LOGIN";
- }
-};
-
-/* LOAD BUSINESS */
+const $=id=>document.getElementById(id);
+const money=n=>"KSh "+Number(n||0).toLocaleString("en-KE",{minimumFractionDigits:2,maximumFractionDigits:2});
+function msg(id,text,type="success"){const e=$(id);if(!e)return;e.textContent=text;e.className="message "+(type==="error"?"error":"success");e.style.display="block";}
+function hideMsg(id){if($(id))$(id).style.display="none";}
+function openPage(id){document.querySelectorAll(".appPage").forEach(x=>x.classList.add("hidden"));if($(id))$(id).classList.remove("hidden");window.scrollTo(0,0);if(id==="stockPage")loadProducts();if(id==="customersPage")loadCustomers();if(id==="suppliersPage")loadSuppliers();if(id==="marketPage")loadMarket();if(id==="salesPage"||id==="debtsPage"||id==="expensesPage"||id==="profitPage"||id==="reportsPage")loadTransactions();}
+function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);}
+function normalizePhone(v){let p=v.replace(/[\s\-()]/g,"");if(/^0[17]\d{8}$/.test(p))p="+254"+p.slice(1);else if(/^254[17]\d{8}$/.test(p))p="+"+p;else if(/^[17]\d{8}$/.test(p))p="+254"+p;if(!/^\+254[17]\d{8}$/.test(p))throw Error("Enter a valid Kenyan phone number.");return p;}
+function internalEmail(p){return p.replace("+","")+"@login.hesabora.app";}
+function dateStart(p){const d=new Date();d.setHours(0,0,0,0);if(p==="yesterday")d.setDate(d.getDate()-1);if(p==="week"){d.setDate(d.getDate()-((d.getDay()+6)%7));}if(p==="month")d.setDate(1);return d;}
+function dateEnd(p){const d=dateStart(p);if(p==="today"||p==="yesterday")d.setDate(d.getDate()+1);else if(p==="week")d.setDate(d.getDate()+7);else if(p==="month")d.setMonth(d.getMonth()+1);else d.setFullYear(d.getFullYear()+100);return d;}
+function businessId(){if(!currentBusiness?.id)throw Error("Business account not found.");return currentBusiness.id;}
+async function checkError(result){if(result.error)throw result.error;return result.data;}
+async function loadProfile(){const {data,error}=await db.from("profiles").select("full_name,phone").eq("id",currentUser.id).maybeSingle();if(error)console.warn(error);return data;}
 async function loadBusiness(){
  if(!currentUser){showScreen("authScreen");return;}
-
- const {data:profile,error:profileError}=await db.from("profiles")
-  .select("full_name,phone").eq("id",currentUser.id).maybeSingle();
- if(profileError)console.error("Profile:",profileError);
-
- const {data:businesses,error}=await db.from("businesses")
-  .select("id,business_name,phone,currency,language,account_status")
-  .eq("owner_id",currentUser.id).limit(1);
-
- if(error){
-  console.error(error);
-  showScreen("setupScreen");
-  showMsg("businessMessage","We couldn't load your business. Please refresh and try again.","error");
-  return;
- }
-
- if(businesses&&businesses.length){
-  currentBusiness=businesses[0];
-
-  if(currentBusiness.account_status==="suspended"||currentBusiness.account_status==="closed"){
-   await db.auth.signOut();
-   currentUser=null;
-   currentBusiness=null;
-   showScreen("authScreen");
-   showMsg("loginMessage","This business account is currently suspended. Please contact HESABORA support.","error");
-   return;
-  }
-
-  await checkAdminAccess();
-  showDashboard(profile);
-  await loadMySubscription();
- }else{
-  showScreen("setupScreen");
-  await checkAdminAccess();
- }
+ const profile=await loadProfile();
+ const {data:bs,error}=await db.from("businesses").select("id,business_name,phone,currency,language,account_status").eq("owner_id",currentUser.id).limit(1);
+ if(error)throw error;
+ if(!bs?.length){currentBusiness=null;await checkAdminAccess();showScreen("setupScreen");return;}
+ currentBusiness=bs[0];
+ if(["suspended","closed"].includes(currentBusiness.account_status)){await db.auth.signOut();currentUser=null;showScreen("authScreen");msg("loginMessage","This business account is suspended.","error");return;}
+ await checkAdminAccess();
+ $("businessHeading").textContent="Welcome Back! 👋 "+currentBusiness.business_name;
+ $("ownerHeading").textContent=(profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+currentBusiness.phone;
+ $("settingsBusiness").textContent="Business: "+currentBusiness.business_name;
+ $("settingsPhone").textContent="Phone: "+currentBusiness.phone;
+ showScreen("appScreen");openPage("dashboardPage");
+ await Promise.allSettled([loadMySubscription(),loadTransactions(),loadProducts()]);
 }
+$("showLogin").onclick=e=>{e.preventDefault();$("registerBox").classList.add("hidden");$("loginBox").classList.remove("hidden");};
+$("showRegister").onclick=e=>{e.preventDefault();$("loginBox").classList.add("hidden");$("registerBox").classList.remove("hidden");};
+$("registerForm").onsubmit=async e=>{e.preventDefault();const b=$("registerButton");b.disabled=true;try{const name=$("fullName").value.trim(),phone=normalizePhone($("registerPhone").value),pass=$("registerPassword").value;if(pass.length<8)throw Error("Password must have at least 8 characters.");if(pass!==$("confirmPassword").value)throw Error("Passwords do not match.");const {data,error}=await db.auth.signUp({email:internalEmail(phone),password:pass,options:{data:{full_name:name,phone}}});if(error)throw error;if(!data.session)throw Error("Account created. Enable the Supabase email confirmation setting for passwordless phone-based signup, then log in.");currentUser=data.user;await loadBusiness();}catch(err){msg("registerMessage",err.message,"error");}finally{b.disabled=false;}};
+$("loginForm").onsubmit=async e=>{e.preventDefault();const b=$("loginButton");b.disabled=true;try{const phone=normalizePhone($("loginPhone").value);const {data,error}=await db.auth.signInWithPassword({email:internalEmail(phone),password:$("loginPassword").value});if(error)throw error;currentUser=data.user;await loadBusiness();}catch(err){msg("loginMessage",err.message,"error");}finally{b.disabled=false;}};
+$("businessForm").onsubmit=async e=>{e.preventDefault();const b=$("businessButton");b.disabled=true;try{const phone=normalizePhone($("businessPhone").value);const {data,error}=await db.from("businesses").insert({owner_id:currentUser.id,business_name:$("businessName").value.trim(),phone,currency:"KES",language:$("businessLanguage").value}).select().single();if(error)throw error;currentBusiness=data;await loadBusiness();}catch(err){msg("businessMessage",err.message,"error");}finally{b.disabled=false;}};
 
-/* CREATE BUSINESS */
-document.getElementById("businessForm").onsubmit=async e=>{
- e.preventDefault();
- const b=document.getElementById("businessButton");
- b.disabled=true;
- b.textContent="Creating business...";
- try{
-  const name=document.getElementById("businessName").value.trim();
-  const phone=normalizePhone(document.getElementById("businessPhone").value);
-  const language=document.getElementById("businessLanguage").value;
-
-  const {data,error}=await db.from("businesses").insert({
-   owner_id:currentUser.id,
-   business_name:name,
-   phone:phone,
-   currency:"KES",
-   language:language
-  }).select().single();
-
-  if(error)throw error;
-  currentBusiness=data;
-  await checkAdminAccess();
-  showDashboard();
-  await loadMySubscription();
- }catch(err){
-  showMsg("businessMessage",err.message,"error");
- }finally{
-  b.disabled=false;
-  b.textContent="CREATE BUSINESS";
- }
-};
-
-/* ADMIN ACCESS */
 async function checkAdminAccess(){
- currentAdmin=null;
- document.getElementById("adminAccessArea").classList.add("hidden");
- if(!currentUser)return;
-
- const {data,error}=await db.from("platform_admins")
-  .select("user_id,full_name,role,responsibilities,permissions,is_active,status")
-  .eq("user_id",currentUser.id).maybeSingle();
-
- if(error){
-  console.warn("Admin access check:",error.message);
-  return;
- }
-
- if(data&&(data.is_active===true||data.status==="active")){
-  currentAdmin=data;
-  currentAdmin.is_active=true;
-  document.getElementById("adminAccessArea").classList.remove("hidden");
- }
+ currentAdmin=null;$("adminAccessArea").classList.add("hidden");if(!currentUser)return;
+ const {data,error}=await db.from("platform_admins").select("id,user_id,full_name,role,responsibilities,permissions,is_active,status").eq("user_id",currentUser.id).maybeSingle();
+ if(error){console.warn("Admin access:",error.message);return;}
+ if(data&&data.status==="active"&&data.is_active===true){currentAdmin=data;$("adminAccessArea").classList.remove("hidden");}
 }
+async function loadMySubscription(){if(!currentUser)return;const {data,error}=await db.rpc("hesabora_my_subscription");if(error){$("subscriptionStatus").textContent="Could not load";console.warn(error);return;}let s=Array.isArray(data)?data[0]:data;if(s?.subscription)s=s.subscription;$("subscriptionStatus").textContent=(s?.status||"not subscribed").toUpperCase();$("subscriptionExpiry").textContent=s?.expires_at?new Date(s.expires_at).toLocaleDateString():"—";}
+$("subscriptionPaymentForm").onsubmit=async e=>{e.preventDefault();const b=$("subscriptionSubmitButton");b.disabled=true;try{const code=$("subscriptionMpesaCode").value.trim().toUpperCase(),phone=normalizePhone($("subscriptionPhone").value);const {error}=await db.rpc("hesabora_submit_subscription_payment",{p_mpesa_code:code,p_phone_number:phone});if(error)throw error;msg("subscriptionPaymentMessage","Payment submitted. Awaiting verification.");e.target.reset();}catch(err){msg("subscriptionPaymentMessage",err.message,"error");}finally{b.disabled=false;}};
+$("refreshSubscriptionButton").onclick=async()=>{await loadMySubscription();msg("subscriptionRefreshMessage","Subscription refreshed.");};
 
-/* DASHBOARD */
-function showDashboard(profile){
- showScreen("appScreen");
- document.getElementById("businessHeading").textContent="Welcome Back! 👋 "+(currentBusiness?.business_name||"");
- document.getElementById("ownerHeading").textContent=(profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+(currentBusiness?.phone||"");
- document.getElementById("settingsBusiness").textContent="Business: "+(currentBusiness?.business_name||"");
- document.getElementById("settingsPhone").textContent="Phone: "+(currentBusiness?.phone||"");
- openPage("dashboardPage");
+async function insertTransaction(row){const payload={business_id:businessId(),user_id:currentUser.id,...row};const {data,error}=await db.from("hesabora_transactions").insert(payload).select().single();if(error)throw error;return data;}
+async function loadTransactions(){
+ if(!currentBusiness)return;
+ const {data,error}=await db.from("hesabora_transactions").select("*").eq("business_id",currentBusiness.id).order("transaction_date",{ascending:false}).limit(1000);
+ if(error){console.warn("Transactions:",error.message);return;}
+ transactions=data||[];renderFinancials();
 }
-
-/* SUBSCRIPTION STATUS */
-function formatDate(value){
- if(!value)return "—";
- const d=new Date(value);
- if(Number.isNaN(d.getTime()))return "—";
- return d.toLocaleDateString("en-KE",{day:"numeric",month:"short",year:"numeric"});
+function filteredTransactions(){const start=dateStart(period),end=dateEnd(period);return transactions.filter(t=>{const d=new Date(t.transaction_date||t.created_at);return d>=start&&d<end;});}
+function renderFinancials(){
+ const list=filteredTransactions(),sum=(type)=>list.filter(x=>x.transaction_type===type).reduce((a,x)=>a+Number(x.amount||0),0);
+ const sales=sum("sale"),expenses=sum("expense"),debts=sum("debt"),repay=sum("debt_payment"),purchases=sum("stock_purchase");
+ $("dashSales").textContent=money(sales);$("dashExpenses").textContent=money(expenses);$("dashDebts").textContent=money(Math.max(0,debts-repay));$("dashBalance").textContent=money(sales+repay-expenses-purchases);
+ $("profitSales").textContent=money(sales);$("profitExpenses").textContent=money(expenses);$("profitPurchases").textContent=money(purchases);$("profitNet").textContent=money(sales+repay-expenses-purchases);
+ $("salesList").innerHTML=list.filter(x=>x.transaction_type==="sale").map(x=>`<div class="item">${escapeHtml(x.product_name||x.description||"Sale")} — <b>${money(x.amount)}</b><div class="muted">${escapeHtml(x.payment_method||"")} • ${new Date(x.transaction_date||x.created_at).toLocaleString()}</div></div>`).join("")||"<p class='muted'>No sales recorded in this period.</p>";
+ $("expenseList").innerHTML=list.filter(x=>x.transaction_type==="expense").map(x=>`<div class="item">${escapeHtml(x.description||"Expense")} — <b>${money(x.amount)}</b></div>`).join("");
+ $("debtsList").innerHTML=transactions.filter(x=>x.transaction_type==="debt").map(x=>`<div class="item">${escapeHtml(x.customer_name||"Customer")} • ${escapeHtml(x.product_name||"")} — <b>${money(x.amount)}</b><div class="muted">${new Date(x.transaction_date||x.created_at).toLocaleDateString()}</div></div>`).join("")||"<p class='muted'>No debts recorded.</p>";
 }
-
-function setSubscriptionStatus(status,expiry){
- const statusEl=document.getElementById("subscriptionStatus");
- const expiryEl=document.getElementById("subscriptionExpiry");
- const clean=(status||"not subscribed").toLowerCase();
-
- statusEl.textContent=clean.toUpperCase();
- statusEl.className="status-pill "+(
-  clean==="active"?"status-active":
-  clean==="pending"?"status-pending":
-  clean==="rejected"?"status-rejected":"status-expired"
- );
- expiryEl.textContent=formatDate(expiry);
-}
-
-async function loadMySubscription(){
- if(!currentUser||!currentBusiness)return;
-
- const statusEl=document.getElementById("subscriptionStatus");
- statusEl.textContent="Checking...";
-
- const {data,error}=await db.rpc("hesabora_my_subscription");
-
- if(error){
-  console.error("Subscription load:",error);
-  statusEl.textContent="Could not load";
-  showMsg("subscriptionRefreshMessage","Could not load subscription: "+error.message,"error");
-  return;
- }
-
- let sub=Array.isArray(data)?data[0]:data;
- if(sub&&typeof sub==="object"&&sub.subscription)sub=sub.subscription;
-
- if(!sub){
-  setSubscriptionStatus("not subscribed",null);
-  return;
- }
-
- setSubscriptionStatus(sub.status||"expired",sub.expires_at);
-}
-
-/* SUBMIT SUBSCRIPTION PAYMENT */
-document.getElementById("subscriptionPaymentForm").onsubmit=async e=>{
- e.preventDefault();
- const button=document.getElementById("subscriptionSubmitButton");
- button.disabled=true;
- button.textContent="Submitting...";
- hideMsg("subscriptionPaymentMessage");
-
+document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{period=b.dataset.period;document.querySelectorAll(".filter").forEach(x=>x.style.background="#eaf1fb");b.style.background="#c8dcf5";$("periodTitle").textContent=b.textContent+" Summary";renderFinancials();});
+$("saleForm").onsubmit=async e=>{
+ e.preventDefault();const b=e.submitter;b.disabled=true;
  try{
-  if(!currentUser||!currentBusiness)throw Error("Please log in and register your business first.");
-
-  const code=document.getElementById("subscriptionMpesaCode").value.trim().toUpperCase();
-  const phone=normalizePhone(document.getElementById("subscriptionPhone").value);
-
-  if(code.length<6)throw Error("Enter a valid M-PESA transaction code.");
-
-  const {data,error}=await db.rpc("hesabora_submit_subscription_payment",{
-   p_mpesa_code:code,
-   p_phone_number:phone
-  });
-
-  if(error)throw error;
-
-  showMsg("subscriptionPaymentMessage",
-   "Payment details submitted successfully. Your payment is awaiting verification by HESABORA. Your subscription will activate after approval."
-  );
-  document.getElementById("subscriptionPaymentForm").reset();
-
- }catch(err){
-  showMsg("subscriptionPaymentMessage",err.message||"Payment submission failed.","error");
- }finally{
-  button.disabled=false;
-  button.textContent="SUBMIT PAYMENT FOR VERIFICATION";
- }
+ const productId=$("saleProduct").value,qty=Number($("saleQuantity").value),amount=Number($("saleAmount").value),method=$("saleMethod").value;
+ const product=products.find(p=>p.id===productId);
+ if(product&&Number(product.quantity)<qty)throw Error("Not enough stock available.");
+ const productName=product?.product_name||$("saleProductName").value.trim();
+ if(productId&&!productName)throw Error("Select a product.");
+ await insertTransaction({transaction_type:"sale",description:"Sale",product_name:productName||"Sale",product_id:productId||null,customer_name:$("saleCustomer").value.trim()||null,quantity:qty,unit_cost:product?.buying_price??null,amount,payment_method:method,transaction_date:new Date().toISOString()});
+ if(method==="credit")await insertTransaction({transaction_type:"debt",description:"Credit sale",product_name:productName||"Sale",product_id:productId||null,customer_name:$("saleCustomer").value.trim()||null,quantity:qty,amount,payment_method:"credit",transaction_date:new Date().toISOString()});
+ if(product){const {error}=await db.from("hesabora_products").update({quantity:Number(product.quantity)-qty}).eq("id",product.id).eq("business_id",currentBusiness.id);if(error)throw Error("Sale saved but stock update failed: "+error.message);}
+ msg("saleMessage","Sale recorded.");e.target.reset();await Promise.all([loadTransactions(),loadProducts()]);
+ }catch(err){msg("saleMessage",err.message,"error");}finally{b.disabled=false;}
 };
+$("debtForm").onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{await insertTransaction({transaction_type:"debt",customer_name:$("debtCustomer").value.trim(),product_name:$("debtProduct").value.trim(),amount:Number($("debtAmount").value),payment_method:"credit",transaction_date:new Date().toISOString()});msg("debtMessage","Debt recorded.");e.target.reset();await loadTransactions();}catch(err){msg("debtMessage",err.message,"error");}finally{b.disabled=false;}};
+$("expenseForm").onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{await insertTransaction({transaction_type:"expense",description:$("expenseType").value.trim(),amount:Number($("expenseAmount").value),payment_method:$("expenseMethod").value,transaction_date:new Date().toISOString()});msg("expenseMessage","Expense recorded.");e.target.reset();await loadTransactions();}catch(err){msg("expenseMessage",err.message,"error");}finally{b.disabled=false;}};
 
-document.getElementById("refreshSubscriptionButton").onclick=async()=>{
- hideMsg("subscriptionRefreshMessage");
- await loadMySubscription();
- showMsg("subscriptionRefreshMessage","Subscription information refreshed.");
-};
+async function loadProducts(){
+ if(!currentBusiness)return;
+ const {data,error}=await db.from("hesabora_products").select("*").eq("business_id",currentBusiness.id).order("product_name");
+ if(error){$("stockList").textContent="Could not load stock: "+error.message;return;}
+ products=data||[];
+ $("saleProduct").innerHTML='<option value="">Select product (optional)</option>'+products.map(p=>`<option value="${p.id}">${escapeHtml(p.product_name)} (${p.quantity} available)</option>`).join("");
+ $("stockList").innerHTML=products.map(p=>`<div class="business-card"><b>${escapeHtml(p.product_name)}</b><div class="muted">Category: ${escapeHtml(p.category||"—")} • Quantity: ${p.quantity} • Buy: ${money(p.buying_price)} • Sell: ${money(p.selling_price)}</div><div class="row"><button class="secondary" onclick="editProduct('${p.id}')">EDIT</button><button class="danger" onclick="deleteProduct('${p.id}')">DELETE</button></div>${Number(p.quantity)<=Number(p.low_stock_level||0)?'<span class="status-pill status-pending">LOW STOCK</span>':""}</div>`).join("")||"<p class='muted'>No products yet.</p>";
+}
+$("productForm").onsubmit=async e=>{e.preventDefault();try{const row={business_id:businessId(),product_name:$("productName").value.trim(),category:$("productCategory").value.trim(),quantity:Number($("productQuantity").value),buying_price:Number($("productBuying").value),selling_price:Number($("productSelling").value),low_stock_level:Number($("productLow").value||0)};const {error}=await db.from("hesabora_products").insert(row);if(error)throw error;msg("productMessage","Product added.");e.target.reset();await loadProducts();}catch(err){msg("productMessage",err.message,"error");}};
+window.editProduct=async id=>{const p=products.find(x=>x.id===id);if(!p)return;const q=prompt("Enter new stock quantity",p.quantity);if(q===null)return;if(!Number.isFinite(Number(q))||Number(q)<0)return alert("Invalid quantity.");const {error}=await db.from("hesabora_products").update({quantity:Number(q)}).eq("id",id).eq("business_id",currentBusiness.id);if(error)alert(error.message);else loadProducts();};
+window.deleteProduct=async id=>{if(!confirm("Delete this product?"))return;const {error}=await db.from("hesabora_products").delete().eq("id",id).eq("business_id",currentBusiness.id);if(error)alert(error.message);else loadProducts();};
 
-/* PREVIEW FORMS */
-document.getElementById("saleForm").onsubmit=e=>{
- e.preventDefault();
- showMsg("saleMessage","Preview only. Real transaction saving will be enabled after subscription and secure database integration.");
-};
+async function loadCustomers(){const {data,error}=await db.from("hesabora_customers").select("*").eq("business_id",businessId()).order("created_at",{ascending:false});if(error){$("customerList").textContent=error.message;return;}$("customerList").innerHTML=(data||[]).map(x=>`<div class="item"><b>${escapeHtml(x.full_name)}</b><div class="muted">${escapeHtml(x.phone||"")} • ${escapeHtml(x.location||"")}</div></div>`).join("")||"<p class='muted'>No customers yet.</p>";}
+$("customerForm").onsubmit=async e=>{e.preventDefault();try{const {error}=await db.from("hesabora_customers").insert({business_id:businessId(),full_name:$("customerName").value.trim(),phone:$("customerPhone").value.trim(),location:$("customerLocation").value.trim(),notes:$("customerNotes").value.trim()});if(error)throw error;msg("customerMessage","Customer saved.");e.target.reset();loadCustomers();}catch(err){msg("customerMessage",err.message,"error");}};
+async function loadSuppliers(){const {data,error}=await db.from("hesabora_suppliers").select("*").eq("business_id",businessId()).order("created_at",{ascending:false});if(error){$("supplierList").textContent=error.message;return;}$("supplierList").innerHTML=(data||[]).map(x=>`<div class="item"><b>${escapeHtml(x.supplier_name)}</b><div class="muted">${escapeHtml(x.phone||"")} • ${escapeHtml(x.location||"")}</div></div>`).join("")||"<p class='muted'>No suppliers yet.</p>";}
+$("supplierForm").onsubmit=async e=>{e.preventDefault();try{const {error}=await db.from("hesabora_suppliers").insert({business_id:businessId(),supplier_name:$("supplierName").value.trim(),phone:$("supplierPhone").value.trim(),location:$("supplierLocation").value.trim(),notes:$("supplierNotes").value.trim()});if(error)throw error;msg("supplierMessage","Supplier saved.");e.target.reset();loadSuppliers();}catch(err){msg("supplierMessage",err.message,"error");}};
 
-document.getElementById("debtForm").onsubmit=e=>{
- e.preventDefault();
- showMsg("debtMessage","Preview only. Debt saving will be enabled after secure database integration.");
-};
+async function loadMarket(){const {data,error}=await db.from("hesabora_market_listings").select("*").eq("status","active").order("created_at",{ascending:false}).limit(100);if(error){$("marketListings").textContent=error.message;return;}renderMarket(data||[]);}
+function renderMarket(rows){const q=($("marketSearch").value||"").toLowerCase();$("marketListings").innerHTML=rows.filter(x=>(x.product_name+" "+(x.description||"")).toLowerCase().includes(q)).map(x=>`<div class="business-card"><b>${escapeHtml(x.product_name)}</b><p>${escapeHtml(x.description||"")}</p><strong>${money(x.price)}</strong><div class="muted">Quantity: ${x.quantity} • Contact: ${escapeHtml(x.contact_phone||"")}</div><a href="tel:${encodeURIComponent(x.contact_phone||"")}">CONTACT SELLER</a></div>`).join("")||"<p class='muted'>No matching products.</p>";}
+$("marketSearch").oninput=loadMarket;
+$("listingForm").onsubmit=async e=>{e.preventDefault();try{const {error}=await db.from("hesabora_market_listings").insert({business_id:businessId(),product_name:$("listingName").value.trim(),description:$("listingDescription").value.trim(),price:Number($("listingPrice").value),quantity:Number($("listingQuantity").value),contact_phone:normalizePhone($("listingPhone").value),status:"active"});if(error)throw error;msg("listingMessage","Your listing has been published.");e.target.reset();}catch(err){msg("listingMessage",err.message,"error");}};
 
-document.getElementById("expenseForm").onsubmit=e=>{
- e.preventDefault();
- showMsg("expenseMessage","Preview only. Expense saving will be enabled after secure database integration.");
-};
+$("generateReport").onclick=async()=>{const p=$("reportPeriod").value;period=p==="all"?"all":p;await loadTransactions();const rows=p==="all"?transactions:filteredTransactions();const sum=t=>rows.filter(x=>x.transaction_type===t).reduce((a,x)=>a+Number(x.amount||0),0);$("reportOutput").innerHTML=`<div class="item">Sales: <b>${money(sum("sale"))}</b></div><div class="item">Expenses: <b>${money(sum("expense"))}</b></div><div class="item">Debt: <b>${money(sum("debt"))}</b></div><div class="item">Debt repayments: <b>${money(sum("debt_payment"))}</b></div><div class="item">Stock purchases: <b>${money(sum("stock_purchase"))}</b></div>`;};
 
-/* LOGOUT */
-document.getElementById("logoutButton").onclick=async()=>{
- await db.auth.signOut();
- currentUser=null;
- currentBusiness=null;
- currentAdmin=null;
- registeredBusinesses=[];
- showScreen("authScreen");
- document.getElementById("registerBox").classList.remove("hidden");
- document.getElementById("loginBox").classList.add("hidden");
-};
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
-/* NOTIFICATIONS AND FILTERS */
-document.getElementById("notificationButton").onclick=()=>alert("You have no new notifications.");
-
-document.querySelectorAll(".filter").forEach(b=>{
- b.onclick=()=>{
-  document.querySelectorAll(".filter").forEach(x=>x.style.background="#eaf1fb");
-  b.style.background="#c8dcf5";
- };
-});
-
-/* VOICE */
-document.getElementById("voiceButton").onclick=()=>{
- const result=document.getElementById("voiceResult");
- const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SpeechRecognition){
-  result.textContent="Voice recognition is not supported by this browser.";
-  return;
- }
- const recognition=new SpeechRecognition();
- recognition.lang="sw-KE";
- recognition.onresult=e=>{result.textContent="You said: "+e.results[0][0].transcript;};
- recognition.onerror=()=>{result.textContent="Could not recognise speech. Please try again.";};
- recognition.start();
-};
-
-/* ADMIN PORTAL */
-document.getElementById("openAdminButton").onclick=async()=>{
- if(!currentAdmin||!currentAdmin.is_active){
-  alert("You are not authorised to access Admin Portal.");
-  return;
- }
-
- document.getElementById("adminIdentity").textContent="Signed in as: "+(currentAdmin.full_name||currentUser.id);
- document.getElementById("adminRoleBadge").textContent=currentAdmin.role.replaceAll("_"," ").toUpperCase();
-
+/* ADMIN PORTAL: secure RPCs are used for admin mutations. */
+$("openAdminButton").onclick=async()=>{
+ if(!currentAdmin||currentAdmin.status!=="active"||currentAdmin.is_active!==true){alert("Not authorised.");return;}
+ $("adminIdentity").textContent="Signed in as: "+(currentAdmin.full_name||currentUser.id);
+ $("adminRoleBadge").textContent=currentAdmin.role.replaceAll("_"," ").toUpperCase();
  const isSuper=currentAdmin.role==="super_admin";
- document.getElementById("superAdminTools").classList.toggle("hidden",!isSuper);
- document.getElementById("regularAdminInfo").classList.toggle("hidden",isSuper);
- document.getElementById("myResponsibilities").textContent=Array.isArray(currentAdmin.responsibilities)?currentAdmin.responsibilities.join(", "):"No responsibilities assigned.";
-
- openPage("adminPortalPage");
- await loadAdminActivity();
-
- if(isSuper){
-  await loadRegisteredBusinesses();
-  await loadAdminList();
-  await loadPendingSubscriptionPayments();
- }
+ $("superAdminTools").classList.toggle("hidden",!isSuper);
+ $("myResponsibilities").textContent=JSON.stringify(currentAdmin.permissions||currentAdmin.responsibilities||{});
+ openPage("adminPortalPage");await loadAdminActivity();
+ if(isSuper){await loadRegisteredBusinesses();await loadAdminList();await loadPendingPayments();}
 };
-
-/* REGISTERED BUSINESSES */
-async function loadRegisteredBusinesses(){
- const box=document.getElementById("businessList");
- box.innerHTML="<p class='muted'>Loading registered businesses...</p>";
- hideMsg("businessListMessage");
-
- if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  box.textContent="Super Admin access required.";
-  return;
- }
-
- const {data,error}=await db.rpc("hesabora_admin_business_list");
-
- if(error){
-  box.textContent="Could not load businesses: "+error.message;
-  return;
- }
-
- registeredBusinesses=Array.isArray(data)?data:[];
- renderRegisteredBusinesses();
-}
-
-function renderRegisteredBusinesses(){
- const box=document.getElementById("businessList");
- const search=(document.getElementById("businessSearch").value||"").trim().toLowerCase();
-
- const filtered=registeredBusinesses.filter(b=>{
-  const values=[
-   b.business_name,
-   b.business_phone,
-   b.owner_name,
-   b.owner_phone,
-   b.business_id
-  ];
-  return values.some(v=>String(v||"").toLowerCase().includes(search));
- });
-
- if(!filtered.length){
-  box.innerHTML=registeredBusinesses.length
-   ?"<p class='muted'>No businesses match your search.</p>"
-   :"<p class='muted'>There are no registered businesses yet.</p>";
-  return;
- }
-
- box.innerHTML="";
-
- filtered.forEach(b=>{
-  const card=document.createElement("div");
-  card.className="business-card";
-
-  const name=document.createElement("div");
-  name.className="business-name";
-  name.textContent=b.business_name||"Unnamed business";
-
-  const status=(b.account_status||"unknown").toLowerCase();
-  const statusBadge=document.createElement("span");
-  statusBadge.className="status-pill "+(status==="active"?"status-active":status==="suspended"||status==="closed"?"status-expired":"");
-  statusBadge.textContent=status.toUpperCase();
-
-  const details=document.createElement("div");
-  details.className="business-details";
-
-  const rows=[
-   "Owner: "+(b.owner_name||"Not available"),
-   "Owner phone: "+(b.owner_phone||"Not available"),
-   "Business phone: "+(b.business_phone||"Not available"),
-   "Subscription: "+(b.subscription_status||"Not subscribed"),
-   "Plan: "+(b.plan_name||"—"),
-   "Subscription expiry: "+formatDate(b.expires_at),
-   "Joined: "+formatDate(b.joined_at),
-   "Business ID: "+(b.business_id||"—")
-  ];
-
-  details.textContent=rows.join("\n");
-  details.style.whiteSpace="pre-line";
-
-  card.append(name,statusBadge,details);
-
-  const actions=document.createElement("div");
-  actions.className="business-actions";
-
-  const button=document.createElement("button");
-
-  if(status==="active"){
-   button.className="danger";
-   button.textContent="DEACTIVATE";
-   button.onclick=()=>changeBusinessStatus(b,"suspended",button);
-  }else{
-   button.className="secondary";
-   button.textContent="REACTIVATE";
-   button.onclick=()=>changeBusinessStatus(b,"active",button);
-  }
-
-  actions.appendChild(button);
-  card.appendChild(actions);
-  box.appendChild(card);
- });
-}
-
-async function changeBusinessStatus(business,newStatus,button){
- if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  showMsg("businessListMessage","Super Admin access required.","error");
-  return;
- }
-
- const businessName=business.business_name||"this business";
- const action=newStatus==="active"?"reactivate":"deactivate";
-
- if(!confirm("Are you sure you want to "+action+" "+businessName+"?"))return;
-
- button.disabled=true;
- button.textContent="PLEASE WAIT...";
-
- const {data,error}=await db.rpc("hesabora_set_business_status",{
-  p_business_id:business.business_id,
-  p_new_status:newStatus
- });
-
- if(error){
-  showMsg("businessListMessage","Could not update business: "+error.message,"error");
-  button.disabled=false;
-  button.textContent=newStatus==="active"?"REACTIVATE":"DEACTIVATE";
-  return;
- }
-
- if(data&&data.success===false){
-  showMsg("businessListMessage","The business status was not updated.","error");
-  button.disabled=false;
-  return;
- }
-
- showMsg(
-  "businessListMessage",
-  businessName+" has been "+(newStatus==="active"?"reactivated.":"deactivated.")
- );
-
- await loadRegisteredBusinesses();
- await loadAdminActivity();
-}
-
-document.getElementById("refreshBusinessesButton").onclick=loadRegisteredBusinesses;
-document.getElementById("businessSearch").addEventListener("input",renderRegisteredBusinesses);
-
-/* LOAD PENDING SUBSCRIPTION PAYMENTS */
-async function loadPendingSubscriptionPayments(){
- const box=document.getElementById("pendingPaymentsList");
- box.innerHTML="<p class='muted'>Loading pending payments...</p>";
-
- if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  box.textContent="Super Admin access required.";
-  return;
- }
-
- const {data,error}=await db.rpc("hesabora_pending_payments");
-
- if(error){
-  box.textContent="Could not load pending payments: "+error.message;
-  return;
- }
-
- if(!data||!data.length){
-  box.innerHTML="<p class='muted'>There are no pending subscription payments.</p>";
-  return;
- }
-
- box.innerHTML="";
-
- data.forEach(payment=>{
-  const card=document.createElement("div");
-  card.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=payment.business_name||"Business payment";
-
-  const details=document.createElement("div");
-  details.className="muted";
-  details.style.lineHeight="1.8";
-  details.textContent=
-   "Amount: KSh "+(payment.amount_kes||300)+
-   " | M-PESA code: "+(payment.mpesa_code||"—")+
-   " | Phone: "+(payment.payment_phone||payment.phone_number||"—")+
-   " | Submitted: "+(payment.created_at?new Date(payment.created_at).toLocaleString():"—");
-
-  card.append(title,details);
-
-  const buttons=document.createElement("div");
-  buttons.className="row";
-
-  const approve=document.createElement("button");
-  approve.className="primary";
-  approve.style.marginTop="10px";
-  approve.textContent="APPROVE";
-
-  const reject=document.createElement("button");
-  reject.className="danger";
-  reject.style.marginTop="10px";
-  reject.textContent="REJECT";
-
-  buttons.append(approve,reject);
-  card.appendChild(buttons);
-  box.appendChild(card);
-
-  approve.onclick=()=>reviewSubscriptionPayment(payment.id,"approve",approve,reject);
-  reject.onclick=()=>reviewSubscriptionPayment(payment.id,"reject",approve,reject);
- });
-}
-
-async function reviewSubscriptionPayment(paymentId,decision,approveButton,rejectButton){
- if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  showMsg("pendingPaymentsMessage","Super Admin access required.","error");
-  return;
- }
-
- const message=decision==="approve"
-  ?"Approve this payment and activate 30 days of subscription?"
-  :"Reject this subscription payment?";
-
- if(!confirm(message))return;
-
- approveButton.disabled=true;
- rejectButton.disabled=true;
-
- const {data,error}=await db.rpc("hesabora_review_subscription_payment",{
-  p_payment_id:paymentId,
-  p_decision:decision
- });
-
- if(error){
-  showMsg("pendingPaymentsMessage","Could not review payment: "+error.message,"error");
-  approveButton.disabled=false;
-  rejectButton.disabled=false;
-  return;
- }
-
- showMsg("pendingPaymentsMessage",
-  decision==="approve"?"Payment approved. Subscription activated for 30 days.":"Payment rejected."
- );
-
- await loadPendingSubscriptionPayments();
- await loadAdminActivity();
-};
-
-document.getElementById("refreshPaymentsButton").onclick=loadPendingSubscriptionPayments;
-
-async function writeAdminLog(action,details={}){
- const {error}=await db.from("admin_activity_logs").insert({
-  admin_user_id:currentUser.id,
-  action,
-  details
- });
- if(error)console.warn("Activity log could not be saved:",error.message);
-}
-
-/* ADMIN LIST */
-async function loadAdminList(){
- const box=document.getElementById("adminList");
- box.innerHTML="<p class='muted'>Loading admins...</p>";
-
- const {data,error}=await db.from("platform_admins")
-  .select("user_id,full_name,role,responsibilities,permissions,is_active,created_at")
-  .order("created_at",{ascending:false});
-
- if(error){
-  box.textContent="Could not load admins: "+error.message;
-  return;
- }
-
- if(!data||!data.length){
-  box.innerHTML="<p class='muted'>No admins found.</p>";
-  return;
- }
-
- box.innerHTML="";
-
- data.forEach(admin=>{
-  const card=document.createElement("div");
-  card.className="item";
-
-  const name=document.createElement("strong");
-  name.textContent=admin.full_name||"Unnamed admin";
-
-  const role=document.createElement("div");
-  role.className="muted";
-  role.textContent=admin.role+" • "+(admin.is_active?"Active":"Inactive");
-
-  const uid=document.createElement("div");
-  uid.className="muted";
-  uid.textContent=admin.user_id;
-
-  card.append(name,role,uid);
-
-  if(admin.role!=="super_admin"&&admin.user_id!==currentUser.id){
-   const btn=document.createElement("button");
-   btn.className=admin.is_active?"danger":"secondary";
-   btn.style.marginTop="9px";
-   btn.textContent=admin.is_active?"DEACTIVATE ADMIN":"ACTIVATE ADMIN";
-   btn.onclick=()=>toggleAdmin(admin);
-   card.appendChild(btn);
-  }
-
-  box.appendChild(card);
- });
-}
-
-async function toggleAdmin(admin){
- if(!currentAdmin||currentAdmin.role!=="super_admin")return;
-
- const next=!admin.is_active;
- if(!confirm((next?"Activate":"Deactivate")+" "+(admin.full_name||"this admin")+"?"))return;
-
- const {error}=await db.from("platform_admins")
-  .update({is_active:next,updated_at:new Date().toISOString()})
-  .eq("user_id",admin.user_id);
-
- if(error){
-  showMsg("adminListMessage",error.message,"error");
-  return;
- }
-
- await writeAdminLog(next?"admin_activated":"admin_deactivated",{target_user_id:admin.user_id});
- showMsg("adminListMessage","Admin status updated.");
- await loadAdminList();
- await loadAdminActivity();
-}
-
-/* ADD ADMIN */
-document.getElementById("addAdminForm").onsubmit=async e=>{
- e.preventDefault();
-
- if(!currentAdmin||currentAdmin.role!=="super_admin"){
-  showMsg("addAdminMessage","Super Admin access required.","error");
-  return;
- }
-
- const userId=document.getElementById("newAdminUserId").value.trim();
- const fullName=document.getElementById("newAdminName").value.trim();
- const role=document.getElementById("newAdminRole").value;
- const responsibilities=[...document.getElementById("newAdminResponsibilities").selectedOptions].map(o=>o.value);
-
- if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)){
-  showMsg("addAdminMessage","Enter a valid Supabase User ID (UUID).","error");
-  return;
- }
-
- if(userId===currentUser.id){
-  showMsg("addAdminMessage","You are already the Super Admin.","error");
-  return;
- }
-
- const {error}=await db.from("platform_admins").upsert({
-  user_id:userId,
-  full_name:fullName,
-  role,
-  responsibilities,
-  permissions:{},
-  is_active:true,
-  created_by:currentUser.id,
-  updated_at:new Date().toISOString()
- },{onConflict:"user_id"});
-
- if(error){
-  showMsg("addAdminMessage","Could not add admin: "+error.message,"error");
-  return;
- }
-
- await writeAdminLog("admin_added",{target_user_id:userId,role,responsibilities});
- e.target.reset();
- showMsg("addAdminMessage","Admin added successfully.");
- await loadAdminList();
- await loadAdminActivity();
-};
-
-document.getElementById("refreshAdminsButton").onclick=loadAdminList;
-
-/* ADMIN ACTIVITY */
-async function loadAdminActivity(){
- const box=document.getElementById("adminActivityList");
-
- const {data,error}=await db.from("admin_activity_logs")
-  .select("admin_user_id,action,details,created_at")
-  .order("created_at",{ascending:false}).limit(20);
-
- if(error){
-  box.textContent="Activity logs unavailable: "+error.message;
-  return;
- }
-
- if(!data||!data.length){
-  box.innerHTML="<p class='muted'>No admin activity recorded yet.</p>";
-  return;
- }
-
- box.innerHTML="";
-
- data.forEach(log=>{
-  const div=document.createElement("div");
-  div.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=log.action.replaceAll("_"," ");
-
-  const detail=document.createElement("div");
-  detail.className="muted";
-  detail.textContent=(log.admin_user_id||"Unknown admin")+" • "+new Date(log.created_at).toLocaleString();
-
-  div.append(title,detail);
-  box.appendChild(div);
- });
-}
-
-/* APP STARTUP */
-(async()=>{
- try{
-  showScreen("authScreen");
-  const {data:{session},error}=await db.auth.getSession();
-  if(error)throw error;
-  if(session){
-   currentUser=session.user;
-   await loadBusiness();
-  }
- }catch(err){
-  console.error("HESABORA startup error:",err);
-  showScreen("authScreen");
- }
-})();
+async function loadRegisteredBusinesses(){const {data,error}=await db.rpc("hesabora_admin_business_list");if(error){$("businessList").textContent=error.message;return;}const rows=Array.isArray(data)?data:[];$("businessList").innerHTML=rows.map(b=>`<div class="business-card"><b>${escapeHtml(b.business_name)}</b><div class="muted">${escapeHtml(b.owner_name||"")} • ${escapeHtml(b.owner_phone||"")} • ${escapeHtml(b.account_status||"")}</div></div>`).join("")||"No businesses found.";}
+$("refreshBusinessesButton").onclick=loadRegisteredBusinesses;
+async function loadPendingPayments(){const {data,error}=await db.rpc("hesabora_pending_payments");if(error){$("pendingPaymentsList").textContent=error.message;return;}const rows=data||[];$("pendingPaymentsList").innerHTML="";rows.forEach(p=>{const d=document.createElement("div");d.className="item";const t=document.createElement("div");t.textContent=(p.business_name||"Business")+" • "+money(p.amount_kes||300)+" • "+(p.mpesa_code||"");const a=document.createElement("button");a.className="primary";a.textContent="APPROVE";a.onclick=()=>reviewPayment(p.id,"approve");const r=document.createElement("button");r.className="danger";r.textContent="REJECT";r.onclick=()=>reviewPayment(p.id,"reject");d.append(t,a,r);$("pendingPaymentsList").append(d);});if(!rows.length)$("pendingPaymentsList").textContent="No pending payments.";}
+async function reviewPayment(id,decision){if(!confirm(decision.toUpperCase()+" this payment?"))return;const {error}=await db.rpc("hesabora_review_subscription_payment",{p_payment_id:id,p_decision:decision});if(error)alert(error.message);else{await loadPendingPayments();await loadAdminActivity();}}
+$("refreshPaymentsButton").onclick=loadPendingPayments;
+async function loadAdminList(){const {data,error}=await db.from("platform_admins").select("id,user_id,full_name,role,status,is_active,created_at").order("created_at",{ascending:false});if(error){$("adminList").textContent=error.message;return;}const rows=data||[];$("adminList").innerHTML="";rows.forEach(a=>{const d=document.createElement("div");d.className="item";const t=document.createElement("div");t.textContent=(a.full_name||"Admin")+" • "+a.role+" • "+a.status;d.append(t);if(a.role!=="super_admin"&&a.user_id!==currentUser.id){const b=document.createElement("button");b.className="secondary";b.textContent=a.status==="active"&&a.is_active?"SUSPEND":"ACTIVATE";b.onclick=async()=>{const next=a.status==="active"&&a.is_active?"suspended":"active";const {error}=await db.rpc("hesabora_update_admin_status",{p_admin_id:a.id,p_new_status:next});if(error)msg("adminListMessage",error.message,"error");else{msg("adminListMessage","Admin status updated.");await loadAdminList();await loadAdminActivity();}};d.append(b);} $("adminList").append(d);});}
+$("refreshAdminsButton").onclick=loadAdminList;
+$("addAdminForm").onsubmit=async e=>{e.preventDefault();if(currentAdmin?.role!=="super_admin")return msg("addAdminMessage","Super Admin only.","error");const uid=$("newAdminUserId").value.trim();if(!/^[0-9a-f-]{36}$/i.test(uid))return msg("addAdminMessage","Enter a valid UUID.","error");const {data,error}=await db.rpc("hesabora_add_admin",{p_user_id:uid,p_full_name:$("newAdminName").value.trim(),p_role:$("newAdminRole").value});if(error){msg("addAdminMessage",error.message,"error");return;}msg("addAdminMessage","Admin added successfully.");e.target.reset();await loadAdminList();await loadAdminActivity();};
+async function loadAdminActivity(){const {data,error}=await db.rpc("hesabora_admin_management_overview");if(error){$("adminActivityList").textContent="Activity unavailable: "+error.message;return;}const rows=data?.recent_activities||[];$("adminActivityList").innerHTML=rows.map(x=>`<div class="item">${escapeHtml(x.action||"Admin update")}<div class="muted">${escapeHtml(x.actor_user_id||"")} • ${x.created_at?new Date(x.created_at).toLocaleString():""}</div></div>`).join("")||"No activity recorded yet.";}
+
+/* Voice recognition only fills a draft; it does not auto-save financial records. */
+let voiceTranscript="";
+$("voiceButton").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("voiceResult").textContent="Voice recognition is not supported on this browser.";return;}const r=new SR();r.lang="sw-KE";r.onresult=e=>{voiceTranscript=e.results[0][0].transcript;$("voiceResult").textContent=voiceTranscript;};r.onerror=()=>{$("voiceResult").textContent="Could not recognise speech. Try again.";};r.start();};
+$("voiceToSale").onclick=()=>{if(!voiceTranscript)return alert("Speak first.");$("saleProductName").value=voiceTranscript;openPage("recordPage");};
+
+$("logoutButton").onclick=async()=>{await db.auth.signOut();currentUser=null;currentBusiness=null;currentAdmin=null;transactions=[];products=[];$("registerBox").classList.remove("hidden");$("loginBox").classList.add("hidden");showScreen("authScreen");};
+(async()=>{showScreen("authScreen");const {data,error}=await db.auth.getSession();if(error)console.warn(error);if(data?.session){currentUser=data.session.user;try{await loadBusiness();}catch(err){console.error(err);showScreen("authScreen");}}})();
 </script>
 </body>
- </html>
+</html>￼Enter
+
+<div id="customersPage" class="appPage hidden">
+<div class="row"><h2>Customers</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="customerForm"><label>Full Name</label><input id="customerName" required><label>Phone</label><input id="customerPhone"><label>Location</label><input id="customerLocation"><label>Notes</label><textarea id="customerNotes"></textarea><button class="primary">SAVE CUSTOMER</button></form><div id="customerMessage" class="message"></div><div id="customerList"></div></div>
+</div>
+
+<div id="suppliersPage" class="appPage hidden">
+<div class="row"><h2>Suppliers</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><form id="supplierForm"><label>Supplier Name</label><input id="supplierName" required><label>Phone</label><input id="supplierPhone"><label>Location</label><input id="supplierLocation"><label>Notes</label><textarea id="supplierNotes"></textarea><button class="primary">SAVE SUPPLIER</button></form><div id="supplierMessage" class="message"></div><div id="supplierList"></div></div>
+</div>
+
+<div id="marketPage" class="appPage hidden">
+<div class="row"><h2>HESABORA MARKET</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><button class="primary" onclick="openPage('sellPage')">SELL A PRODUCT</button><label>Search products</label><input id="marketSearch" placeholder="Search product or seller"><div id="marketListings"></div></div>
+</div>
+<div id="sellPage" class="appPage hidden">
+<div class="row"><h2>Sell Product</h2><button class="secondary" onclick="openPage('marketPage')">Back</button></div>
+<div class="card"><form id="listingForm"><label>Product Name</label><input id="listingName" required><label>Description</label><textarea id="listingDescription"></textarea><label>Price (KSh)</label><input id="listingPrice" type="number" min=".01" step=".01" required><label>Quantity</label><input id="listingQuantity" type="number" min="1" value="1" required><label>Contact Phone</label><input id="listingPhone" required><button class="primary">PUBLISH LISTING</button></form><div id="listingMessage" class="message"></div></div>
+</div>
+
+<div id="reportsPage" class="appPage hidden">
+<div class="row"><h2>Reports</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><label>Report period</label><select id="reportPeriod"><option value="today">Today</option><option value="week">This week</option><option value="month">This month</option><option value="all">All records</option></select><button class="primary" id="generateReport">GENERATE REPORT</button><div id="reportOutput"></div></div>
+</div>
+
+<div id="settingsPage" class="appPage hidden">
+<div class="row"><h2>Settings</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><h3>Business Settings</h3><p id="settingsBusiness"></p><p id="settingsPhone"></p></div>
+<div class="card"><h3>HESABORA Subscription</h3><p>KSh 300 / 30 days</p><p>M-PESA: 0114772821</p><p>Status: <strong id="subscriptionStatus">Checking...</strong></p><p>Expiry: <strong id="subscriptionExpiry">—</strong></p>
+<button class="secondary" id="refreshSubscriptionButton">REFRESH SUBSCRIPTION</button><div id="subscriptionRefreshMessage" class="message"></div>
+<form id="subscriptionPaymentForm"><label>M-PESA Transaction Code</label><input id="subscriptionMpesaCode" required maxlength="30"><label>Phone used to pay</label><input id="subscriptionPhone" required><button class="primary" id="subscriptionSubmitButton">SUBMIT PAYMENT</button></form><div id="subscriptionPaymentMessage" class="message"></div>
+</div>
+<div class="card"><div id="adminAccessArea" class="hidden"><h3>System Administration</h3><button class="primary" id="openAdminButton">OPEN ADMIN PORTAL</button></div><button class="danger" id="logoutButton" style="width:100%;margin-top:15px">LOG OUT</button></div>
+</div>
+
+<div id="adminPortalPage" class="appPage hidden">
+<div class="row"><h2>Admin Portal</h2><button class="secondary" onclick="openPage('settingsPage')">Back</button></div>
+<div class="card"><p id="adminIdentity"></p><span id="adminRoleBadge"></span></div>
+<div id="superAdminTools" class="hidden">
+<div class="card"><h3>Registered Businesses</h3><button class="secondary" id="refreshBusinessesButton">REFRESH</button><div id="businessList"></div></div>
+<div class="card"><h3>Pending Subscription Payments</h3><button class="secondary" id="refreshPaymentsButton">REFRESH</button><div id="pendingPaymentsList"></div></div>
+<div class="card"><h3>Add Existing Admin</h3><form id="addAdminForm"><label>User UUID</label><input id="newAdminUserId" required><label>Full Name</label><input id="newAdminName" required><label>Role</label><select id="newAdminRole"><option value="finance_admin">Finance Admin</option><option value="support_admin">Customer Support Admin</option><option value="verification_admin">Business Verification Admin</option><option value="market_admin">Market Admin</option><option value="marketing_admin">Marketing Admin</option><option value="technical_admin">Technical Admin</option><option value="operations_admin">Operations Admin</option></select><button class="primary">ADD ADMIN</button></form><div id="addAdminMessage" class="message"></div></div>
+<div class="card"><h3>Registered Admins</h3><button class="secondary" id="refreshAdminsButton">REFRESH</button><div id="adminList"></div><div id="adminListMessage" class="message"></div></div>
+</div>
+<div class="card"><h3>Your Admin Access</h3><div id="myResponsibilities"></div></div>
+<div class="card"><h3>Admin Activity</h3><div id="adminActivityList"></div></div>
+</div>
+
+<div id="voicePage" class="appPage hidden">
+<div class="row"><h2>Voice Assistant</h2><button class="secondary" onclick="openPage('dashboardPage')">Back</button></div>
+<div class="card"><h3>🎙️ HESABORA Voice</h3><p class="muted">Speak a sale or expense description. Review it before saving.</p><button class="primary" id="voiceButton">START SPEAKING</button><p id="voiceResult"></p><button class="secondary" id="voiceToSale">USE AS SALE DESCRIPTION</button></div>
+</div>
+</main>
+<nav class="nav">
+<button onclick="openPage('dashboardPage')"><span>🏠</span>Home</button>
+<button onclick="openPage('customersPage')"><span>👥</span>Customers</button>
+<button onclick="openPage('voicePage')"><span>🎙️</span>Voice</button>
+<button onclick="openPage('stockPage')"><span>📦</span>Stock</button>
+<button onclick="openPage('settingsPage')"><span>⚙️</span>Settings</button>
+</nav>
+<footer>HESABORA © 2026 • Your Business, Your Future.</footer>
+</section>
+
+<script>
+const SUPABASE_URL="https://ivdvfacwjygnrnnstbji.supabase.co";
+const SUPABASE_KEY="sb_publishable_GXaoW9fbDamZKxsWFEEQvw_bS71EhYU";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null,currentBusiness=null,currentAdmin=null;
+let transactions=[],products=[],period="today";
+
+const $=id=>document.getElementById(id);
+const money=n=>"KSh "+Number(n||0).toLocaleString("en-KE",{minimumFractionDigits:2,maximumFractionDigits:2});
+function msg(id,text,type="success"){const e=$(id);if(!e)return;e.textContent=text;e.className="message "+(type==="error"?"error":"success");e.style.display="block";}
+function hideMsg(id){if($(id))$(id).style.display="none";}
+function openPage(id){document.querySelectorAll(".appPage").forEach(x=>x.classList.add("hidden"));if($(id))$(id).classList.remove("hidden");window.scrollTo(0,0);if(id==="stockPage")loadProducts();if(id==="customersPage")loadCustomers();if(id==="suppliersPage")loadSuppliers();if(id==="marketPage")loadMarket();if(id==="salesPage"||id==="debtsPage"||id==="expensesPage"||id==="profitPage"||id==="reportsPage")loadTransactions();}
+function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);}
+function normalizePhone(v){let p=v.replace(/[\s\-()]/g,"");if(/^0[17]\d{8}$/.test(p))p="+254"+p.slice(1);else if(/^254[17]\d{8}$/.test(p))p="+"+p;else if(/^[17]\d{8}$/.test(p))p="+254"+p;if(!/^\+254[17]\d{8}$/.test(p))throw Error("Enter a valid Kenyan phone number.");return p;}
+function internalEmail(p){return p.replace("+","")+"@login.hesabora.app";}
+function dateStart(p){const d=new Date();d.setHours(0,0,0,0);if(p==="yesterday")d.setDate(d.getDate()-1);if(p==="week"){d.setDate(d.getDate()-((d.getDay()+6)%7));}if(p==="month")d.setDate(1);return d;}
+function dateEnd(p){const d=dateStart(p);if(p==="today"||p==="yesterday")d.setDate(d.getDate()+1);else if(p==="week")d.setDate(d.getDate()+7);else if(p==="month")d.setMonth(d.getMonth()+1);else d.setFullYear(d.getFullYear()+100);return d;}
+function businessId(){if(!currentBusiness?.id)throw Error("Business account not found.");return currentBusiness.id;}
+async function checkError(result){if(result.error)throw result.error;return result.data;}
+async function loadProfile(){const {data,error}=await db.from("profiles").select("full_name,phone").eq("id",currentUser.id).maybeSingle();if(error)console.warn(error);return data;}
+async function loadBusiness(){
+ if(!currentUser){showScreen("authScreen");return;}
+ const profile=await loadProfile();
+ const {data:bs,error}=await db.from("businesses").select("id,business_name,phone,currency,language,account_status").eq("owner_id",currentUser.id).limit(1);
+ if(error)throw error;
+ if(!bs?.length){currentBusiness=null;await checkAdminAccess();showScreen("setupScreen");return;}
+ currentBusiness=bs[0];
+ if(["suspended","closed"].includes(currentBusiness.account_status)){await db.auth.signOut();currentUser=null;showScreen("authScreen");msg("loginMessage","This business account is suspended.","error");return;}
+ await checkAdminAccess();
+ $("businessHeading").textContent="Welcome Back! 👋 "+currentBusiness.business_name;
+ $("ownerHeading").textContent=(profile?.full_name||currentUser.user_metadata?.full_name||"")+" • "+currentBusiness.phone;
+ $("settingsBusiness").textContent="Business: "+currentBusiness.business_name;
+ $("settingsPhone").textContent="Phone: "+currentBusiness.phone;
+ showScreen("appScreen");openPage("dashboardPage");
+ await Promise.allSettled([loadMySubscription(),loadTransactions(),loadProducts()]);
+}
+$("showLogin").onclick=e=>{e.preventDefault();$("registerBox").classList.add("hidden");$("loginBox").classList.remove("hidden");};
+$("showRegister").onclick=e=>{e.preventDefault();$("loginBox").classList.add("hidden");$("registerBox").classList.remove("hidden");};
+$("registerForm").onsubmit=async e=>{e.preventDefault();const b=$("registerButton");b.disabled=true;try{const name=$("fullName").value.trim(),phone=normalizePhone($("registerPhone").value),pass=$("registerPassword").value;if(pass.length<8)throw Error("Password must have at least 8 characters.");if(pass!==$("confirmPassword").value)throw Error("Passwords do not match.");const {data,error}=await db.auth.signUp({email:internalEmail(phone),password:pass,options:{data:{full_name:name,phone}}});if(error)throw error;if(!data.session)throw Error("Account created. Enable the Supabase email confirmation setting for passwordless phone-based signup, then log in.");currentUser=data.user;await loadBusiness();}catch(err){msg("registerMessage",err.message,"error");}finally{b.disabled=false;}};
